@@ -26,7 +26,7 @@ namespace Brush\Accounts {
 		 * Retrieve the account username.
 		 * @return string The account username.
 		 */
-		private final function getUsername() {
+		public final function getUsername() {
 			return $this->username;
 		}
 

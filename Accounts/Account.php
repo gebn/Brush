@@ -3,6 +3,7 @@
 namespace Brush\Accounts {
 
 	use \Brush\Brush;
+	use \Brush\Exceptions\BrushException;
 	use \Brush\Exceptions\RequestException;
 	use \Brush\Exceptions\ApiException;
 
@@ -35,6 +36,13 @@ namespace Brush\Accounts {
 		private $key;
 
 		/**
+		 * An internal user key cache.
+		 * Maps usernames to keys.
+		 * @var array[string]
+		 */
+		private static $keys = array();
+
+		/**
 		 * Retrieve the credentials for this account.
 		 * @return \Brush\Accounts\Credentials The credentials for this account.
 		 */
@@ -59,15 +67,52 @@ namespace Brush\Accounts {
 		}
 
 		/**
+		 * Find if there's a cached key for a user.
+		 * @param string $username The username to check.
+		 * @return boolean True if there is; false if there isn't.
+		 */
+		private static final function isKeyCached($username) {
+			return isset(self::$keys[$username]);
+		}
+
+		/**
+		 * Retrieve the cached user key by its username.
+		 * @param string $username The username of the account whose key to retrieve.
+		 * @throws \Brush\Exceptions\BrushException If the key is not cached.
+		 * @return string The cached key.
+		 */
+		private static final function getUserKey($username) {
+			if (!self::isKeyCached($username)) {
+				throw new BrushException('Username key is not cached.');
+			}
+			return self::$keys[$username];
+		}
+
+		/**
+		 * Update the cached key for a user.
+		 * @param string $username The username whose key this is.
+		 * @param string $key The new API key.
+		 */
+		private final function setUserKey($username, $key) {
+			self::$keys[$username] = $key;
+		}
+
+		/**
 		 * Initialise a new account.
 		 * @param \Brush\Accounts\Credentials|string $mechanism This account's credentials or API user key.
 		 */
 		public function __construct($mechanism) {
-			if ($mechanism instanceof Credentials) {
-				$this->setCredentials($mechanism);
+			if (is_string($mechanism)) {
+				// we've been given a straight user key
+				$this->setKey($mechanism);
+			}
+			else if (self::isKeyCached($mechanism->getUsername())) {
+				// key cache hit
+				$this->setKey(self::getUserKey($mechanism->getUsername()));
 			}
 			else {
-				$this->setKey($mechanism);
+				// key cache miss
+				$this->setCredentials($mechanism);
 			}
 		}
 
@@ -78,7 +123,9 @@ namespace Brush\Accounts {
 		 */
 		private function getKey(Developer $developer) {
 			if ($this->key === null) {
-				$this->setKey($this->fetchKey($developer));
+				$key = $this->fetchKey($developer);
+				self::setUserKey($this->getCredentials()->getUsername(), $key);
+				$this->setKey($key);
 			}
 			return $this->key;
 		}
