@@ -3,7 +3,7 @@
 namespace Brush\Accounts {
 
 	use \Brush\Brush;
-	use \Brush\Exceptions\BrushException;
+	use \Brush\Exceptions\CacheException;
 	use \Brush\Exceptions\RequestException;
 	use \Brush\Exceptions\ApiException;
 
@@ -78,12 +78,12 @@ namespace Brush\Accounts {
 		/**
 		 * Retrieve the cached user key by its username.
 		 * @param string $username The username of the account whose key to retrieve.
-		 * @throws \Brush\Exceptions\BrushException If the key is not cached.
+		 * @throws \Brush\Exceptions\CacheException If the key is not cached.
 		 * @return string The cached key.
 		 */
 		private static final function getUserKey($username) {
 			if (!self::isKeyCached($username)) {
-				throw new BrushException('Username key is not cached.');
+				throw new CacheException('Username key is not cached.');
 			}
 			return self::$keys[$username];
 		}
