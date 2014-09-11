@@ -134,7 +134,7 @@ namespace Brush\Accounts {
 		 * Find the API user key for this account.
 		 * @param \Brush\Accounts\Developer $developer The developer account to use for the request.
 		 * @return string The user's key.
-		 * @throws \Brush\Exceptions\ApiException If Pastebin indicate an error in our request.
+		 * @throws \Brush\Exceptions\ApiException If Pastebin indicates an error in our request.
 		 * @throws \Brush\Exceptions\RequestException If our request to Pastebin's API fails.
 		 */
 		private function fetchKey(Developer $developer) {
