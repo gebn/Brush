@@ -6,7 +6,6 @@ namespace Brush\Exceptions {
 
 	/**
 	 * Represents a generic exception thrown by Brush.
-	 * N.B. Brush also throws some SPL exceptions.
 	 * @author George Brighton
 	 */
 	abstract class BrushException extends Exception {
