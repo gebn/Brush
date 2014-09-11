@@ -98,7 +98,7 @@ namespace Brush\Pastes {
 		public static function fromCode($code) {
 			$formats = Loader::get(self::FORMATS_INI);
 			if (!isset($formats[$code])) {
-				throw new FormatException(sprintf('\'%s\' is not a valid format code.', $code));
+				throw new FormatException(sprintf('\'%s\' is not a recognised format code.', $code));
 			}
 			return new Format($code, $formats[$code]);
 		}
