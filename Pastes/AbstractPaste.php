@@ -1,0 +1,137 @@
+<?php
+
+namespace Brush\Pastes {
+
+	use \Brush\Accounts\Developer;
+
+	use \Crackle\Requests\POSTRequest;
+
+	use \DOMElement;
+
+	/**
+	 * Represents a generic paste.
+	 * @author George Brighton
+	 */
+	abstract class AbstractPaste {
+
+		/**
+		 * The name of this paste.
+		 * @var string
+		 */
+		private $title;
+
+		/**
+		 * The content of this paste.
+		 * @var string
+		 */
+		private $content;
+
+		/**
+		 * The format of this paste.
+		 * @var \Brush\Pastes\Format
+		 */
+		private $format;
+
+		/**
+		 * The visibility of this paste.
+		 * @var int
+		 */
+		private $visibility;
+
+		/**
+		 * Retrieve the name of this paste.
+		 * @return string The name of this paste.
+		 */
+		public final function getTitle() {
+			return $this->title;
+		}
+
+		/**
+		 * Set the name of this paste.
+		 * @param string $title The name of this paste.
+		 */
+		public final function setTitle($title) {
+			$this->title = $title;
+		}
+
+		/**
+		 * Retrieve the content of this paste.
+		 * @return string The content of this paste.
+		 */
+		public final function getContent() {
+			return $this->content;
+		}
+
+		/**
+		 * Set the content of this paste.
+		 * @param string $content The content of this paste.
+		 */
+		public final function setContent($content) {
+			$this->content = $content;
+		}
+
+		/**
+		 * Retrieve the format of this paste.
+		 * @return \Brush\Pastes\Format The format of this paste.
+		 */
+		public final function getFormat() {
+			return $this->format;
+		}
+
+		/**
+		 * Set the format of this paste.
+		 * @param \Brush\Pastes\Format $format The format of this paste.
+		 */
+		public final function setFormat(Format $format) {
+			$this->format = $format;
+		}
+
+		/**
+		 * Retrieve the visibility of this paste.
+		 * @return int The visibility of this paste.
+		 */
+		public final function getVisibility() {
+			return $this->visibility;
+		}
+
+		/**
+		 * Set the visibility of this paste.
+		 * @param int $visibility The visibility of this paste.
+		 */
+		public final function setVisibility($visibility) {
+			$this->visibility = (int)$visibility;
+		}
+
+		/**
+		 * Initialise properties to defaults.
+		 */
+		protected function __construct() {
+			$this->setTitle('Untitled');
+			$this->setFormat(Format::fromCode('text'));
+			$this->setVisibility(Visibility::VISIBILITY_PUBLIC);
+		}
+
+		/**
+		 * Apply the values stored in a chunk of XML to this object.
+		 * @param \DOMElement $paste The `<paste>` element from Pastebin to parse.
+		 */
+		protected function parse(DOMElement $paste) {
+			$this->setTitle($paste->getElementsByTagName('paste_title')->item(0)->nodeValue);
+			$this->setFormat(Format::fromXml($paste));
+			$this->setVisibility($paste->getElementsByTagName('paste_private')->item(0)->nodeValue);
+		}
+
+		/**
+		 * Add the values in this paste to a new paste request.
+		 * @param \Crackle\Requests\POSTRequest $request The request to add variables to.
+		 * @param \Brush\Accounts\Developer $developer The developer that will send the request.
+		 */
+		protected function addTo(POSTRequest $request, Developer $developer) {
+			$variables = $request->getVariables();
+			$variables->set('api_paste_name', $this->getTitle());
+			$variables->set('api_paste_code', $this->getContent());
+			$variables->set('api_paste_private', $this->getVisibility());
+			$this->getFormat()->addTo($request);
+		}
+	}
+}
