@@ -22,6 +22,12 @@ namespace Brush\Pastes {
 		const FORMATS_INI = 'formats.ini';
 
 		/**
+		 * The relative path of the extension mappings configuration file within the configuration directory.
+		 * @var string
+		 */
+		const EXTENSIONS_INI = 'extensions.ini';
+
+		/**
 		 * The short name of this format, e.g. '6502acme'.
 		 * @var string
 		 */
@@ -95,6 +101,23 @@ namespace Brush\Pastes {
 				throw new FormatException(sprintf('\'%s\' is not a valid format code.', $code));
 			}
 			return new Format($code, $formats[$code]);
+		}
+
+		/**
+		 * Retrieve a format by a file extension.
+		 * @param string $extension The file extension to search for. No leading dot.
+		 * @return \Brush\Pastes\Format The created format.
+		 */
+		public static function fromExtension($extension) {
+			$formats = Loader::get(self::EXTENSIONS_INI);
+
+			// search the list of mappings
+			if (isset($formats[$extension])) {
+				return self::fromCode($formats[$extension]);
+			}
+
+			// try using the code directly; if it fails, let the exception bubble up
+			return self::fromCode($extension);
 		}
 
 		/**

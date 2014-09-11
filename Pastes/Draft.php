@@ -9,6 +9,7 @@ namespace Brush\Pastes {
 	use \Brush\Exceptions\ApiException;
 	use \Brush\Exceptions\IOException;
 	use \Brush\Exceptions\RequestException;
+	use \Brush\Exceptions\FormatException;
 	use \Brush\Exceptions\ValidationException;
 
 	use \Crackle\Requests\POSTRequest;
@@ -171,6 +172,13 @@ namespace Brush\Pastes {
 			$draft = new Draft();
 			$draft->setTitle(basename($path));
 			$draft->setContent(file_get_contents($path));
+
+			try {
+				$draft->setFormat(Format::fromExtension(pathinfo($path, PATHINFO_EXTENSION)));
+			} catch (FormatException $e) {
+				// couldn't auto-detect format; ah well
+			}
+
 			return $draft;
 		}
 	}
