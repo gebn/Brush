@@ -2,7 +2,7 @@
 
 namespace Brush\Pastes {
 
-	use \Brush\Exceptions\ValidationException;
+	use \Brush\Exceptions\ArgumentException;
 
 	/**
 	 * Container for expiry constants to use for draft pastes.
@@ -55,7 +55,7 @@ namespace Brush\Pastes {
 		/**
 		 * Find the number of seconds into the future that an expiry constant corresponds to.
 		 * @param string $expiry The value to parse.
-		 * @throws \Brush\Exceptions\ValidationException If the value is an invalid expiry.
+		 * @throws \Brush\Exceptions\ArgumentException If the value is an invalid expiry.
 		 * @return int The number of seconds in the future, or 0 if never.
 		 */
 		public static function getOffset($expiry) {
@@ -66,7 +66,7 @@ namespace Brush\Pastes {
 			if ($expiry == Expiry::EXPIRY_TWO_WEEKS) return 60 * 60 * 24 * 7 * 2;
 			if ($expiry == Expiry::EXPIRY_ONE_MONTH) return 60 * 60 * 24 * 28;
 			if ($expiry == Expiry::EXPIRY_NEVER) return 0;
-			throw new ValidationException(sprintf('Invalid expiry: \'%s\'', $expiry));
+			throw new ArgumentException(sprintf('Invalid expiry: \'%s\'', $expiry));
 		}
 	}
 }
