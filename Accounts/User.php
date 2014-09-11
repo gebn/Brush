@@ -200,7 +200,7 @@ namespace Brush\Accounts {
 		/**
 		 * Create a new user from their XML representation.
 		 * @param \DOMElement $element The user's XML node returned by the Pastebin API.
-		 * @return \Brush\Accounts\User\User The created user.
+		 * @return \Brush\Accounts\User The created user.
 		 */
 		private static final function fromXml(DOMElement $element) {
 			$user = new static();
