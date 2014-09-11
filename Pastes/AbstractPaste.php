@@ -58,7 +58,7 @@ namespace Brush\Pastes {
 		 * Retrieve the content of this paste.
 		 * @return string The content of this paste.
 		 */
-		public final function getContent() {
+		public function getContent() {
 			return $this->content;
 		}
 

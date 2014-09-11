@@ -2,7 +2,11 @@
 
 namespace Brush\Pastes {
 
+	use \Brush\Exceptions\RequestException;
 	use \Brush\Exceptions\ArgumentException;
+
+	use \Crackle\Requests\GETRequest;
+	use \Crackle\Exceptions\RequestException as CrackleRequestException;
 
 	use \DOMElement;
 
@@ -165,6 +169,33 @@ namespace Brush\Pastes {
 		 * Direct outside initialisation of this class is prohibited.
 		 */
 		protected function __construct() {}
+
+		/**
+		 * Retrieve the content of this paste.
+		 * @return string The content of this paste.
+		 */
+		public function getContent() {
+			if (parent::getContent() === null) {
+				$this->loadContent();
+			}
+			return parent::getContent();
+		}
+
+		/**
+		 * Load the content of this paste.
+		 * @throws \Brush\Exceptions\RequestException If the request to Pastebin fails.
+		 */
+		private final function loadContent() {
+			$request = new GETRequest('http://pastebin.com/raw.php');
+			$request->getParameters()->set('i', $this->getKey());
+
+			try {
+				$this->setContent($request->getResponse()->getBody());
+			}
+			catch (CrackleRequestException $e) {
+				throw new RequestException($request);
+			}
+		}
 
 		/**
 		 * Create a paste instance from its XML representation.
