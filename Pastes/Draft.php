@@ -7,6 +7,7 @@ namespace Brush\Pastes {
 	use \Brush\Accounts\Developer;
 	use \Brush\Accounts\User;
 	use \Brush\Exceptions\ApiException;
+	use \Brush\Exceptions\IOException;
 	use \Brush\Exceptions\RequestException;
 	use \Brush\Exceptions\ValidationException;
 
@@ -154,6 +155,23 @@ namespace Brush\Pastes {
 			if ($this->hasOwner()) {
 				$this->getOwner()->sign($request, $developer);
 			}
+		}
+
+		/**
+		 * Create a draft paste from a file.
+		 * @param string $path The path of the file to create a draft from.
+		 * @throws \Brush\Exceptions\IOException If the file cannot be read.
+		 * @return \Brush\Pastes\Draft The created draft paste.
+		 */
+		public static function fromFile($path) {
+			if (!is_readable($path)) {
+				throw new IOException(sprintf('Cannot read from \'%s\'. Check file permissions.'));
+			}
+
+			$draft = new Draft();
+			$draft->setTitle(basename($path));
+			$draft->setContent(file_get_contents($path));
+			return $draft;
 		}
 	}
 }
