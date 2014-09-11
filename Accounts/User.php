@@ -3,6 +3,7 @@
 namespace Brush\Accounts {
 
 	use \Brush\Brush;
+	use \Brush\Pastes\Draft;
 	use \Brush\Exceptions\ApiException;
 	use \Brush\Exceptions\RequestException;
 
@@ -73,6 +74,12 @@ namespace Brush\Accounts {
 		 * @var int
 		 */
 		private $type;
+
+		/**
+		 * This user's default settings.
+		 * @var \Brush\Accounts\Defaults
+		 */
+		private $defaults;
 
 		/**
 		 * Retrieve this user's username.
@@ -179,6 +186,22 @@ namespace Brush\Accounts {
 		}
 
 		/**
+		 * Retrieve this user's default settings.
+		 * @return \Brush\Accounts\Defaults This user's default settings.
+		 */
+		public final function getDefaults() {
+			return $this->defaults;
+		}
+
+		/**
+		 * Set this user's default settings.
+		 * @param \Brush\Accounts\Defaults $defaults This user's default settings.
+		 */
+		private final function setDefaults(Defaults $defaults) {
+			$this->defaults = $defaults;
+		}
+
+		/**
 		 * This class should never be publically instantiated.
 		 */
 		private function __construct() {}
@@ -195,6 +218,7 @@ namespace Brush\Accounts {
 			$location = $user->getElementsByTagName('user_location')->item(0)->nodeValue;
 			$this->setLocation($location === '' ? null : $location);
 			$this->setType($user->getElementsByTagName('user_account_type')->item(0)->nodeValue);
+			$this->setDefaults(Defaults::fromXml($user));
 		}
 
 		/**

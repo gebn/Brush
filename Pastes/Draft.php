@@ -5,6 +5,7 @@ namespace Brush\Pastes {
 	use \Brush\Brush;
 	use \Brush\Accounts\Account;
 	use \Brush\Accounts\Developer;
+	use \Brush\Accounts\User;
 	use \Brush\Exceptions\ApiException;
 	use \Brush\Exceptions\RequestException;
 	use \Brush\Exceptions\ValidationException;
@@ -82,10 +83,15 @@ namespace Brush\Pastes {
 
 		/**
 		 * Initialise properties to defaults.
+		 * @param \Brush\Accounts\User $user An optional user to import default settings from.
 		 */
-		public function __construct() {
+		public function __construct(User $user = null) {
 			parent::__construct();
 			$this->setExpiry(Expiry::EXPIRY_NEVER);
+
+			if ($user !== null) {
+				$user->getDefaults()->applyTo($this);
+			}
 		}
 
 		/**
