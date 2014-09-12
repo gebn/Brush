@@ -81,11 +81,12 @@ namespace Brush\Pastes {
 		}
 
 		/**
-		 * Ensure this draft has no errors before sending to Pastebin.
+		 * Ensure this draft is ready to be sent to Pastebin.
 		 * These checks are not exhaustive - they don't scan for setting invalid expirations or visibilities for example.
 		 * @throws \Brush\Exceptions\ValidationException If any errors are found; check the message for details.
 		 */
-		private function validate() {
+		protected function validate() {
+			parent::validate();
 			if ($this->getVisibility() == Visibility::VISIBILITY_PRIVATE && !$this->hasOwner()) {
 				throw new ValidationException('Private pastes must have an owner set. Change the visibility, or specify the owner.');
 			}

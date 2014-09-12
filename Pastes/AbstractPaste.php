@@ -6,6 +6,7 @@ namespace Brush\Pastes {
 	use \Brush\Accounts\Account;
 	use \Brush\Pastes\Options\Format;
 	use \Brush\Pastes\Options\Visibility;
+	use \Brush\Exceptions\ValidationException;
 
 	use \Crackle\Requests\POSTRequest;
 
@@ -144,6 +145,17 @@ namespace Brush\Pastes {
 			$this->setTitle('Untitled');
 			$this->setFormat(Format::fromCode('text'));
 			$this->setVisibility(Visibility::VISIBILITY_PUBLIC);
+		}
+
+		/**
+		 * Ensure this paste is ready to be sent to Pastebin.
+		 * These checks are not exhaustive - they don't scan for setting invalid expirations or visibilities for example.
+		 * @throws \Brush\Exceptions\ValidationException If any errors are found; check the message for details.
+		 */
+		protected function validate() {
+			if ($this->getContent() == null) { // includes the empty string
+				throw new ValidationException('The paste must have some content.');
+			}
 		}
 
 		/**
