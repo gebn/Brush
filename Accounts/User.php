@@ -2,10 +2,9 @@
 
 namespace Brush\Accounts {
 
-	use Brush\Exceptions\CacheException;
-
 	use \Brush\Brush;
 	use \Brush\Pastes\Draft;
+	use \Brush\Utilities\Cache;
 	use \Brush\Exceptions\ApiException;
 	use \Brush\Exceptions\RequestException;
 
@@ -85,8 +84,7 @@ namespace Brush\Accounts {
 
 		/**
 		 * An internal cache of user objects.
-		 * Organised as cache key => user.
-		 * @var array[\Brush\Accounts\User]
+		 * @var \Brush\Utilities\Cache
 		 */
 		private static $cache;
 
@@ -211,40 +209,33 @@ namespace Brush\Accounts {
 		}
 
 		/**
-		 * Find whether a user instance is cached.
-		 * @param string $key The account's cache key.
-		 * @return boolean True if it is, false if it isn't.
+		 * Retrieve the user instance cache.
+		 * @return \Brush\Utilities\Cache The user instance cache.
 		 */
-		private static final function isUserCached($key) {
-			return isset(self::$cache[$key]);
+		private static final function getCache() {
+			return self::$cache;
 		}
 
 		/**
-		 * Retrieve a user from the cache.
-		 * @param string $key The account's cache key.
-		 * @throws \Brush\Exceptions\CacheException If the user is not cached.
-		 * @return \Brush\Accounts\User The cache user.
+		 * Set the user instance cache.
+		 * @param \Brush\Utilities\Cache $cache The new user instance cache.
 		 */
-		private static final function getCachedUser($key) {
-			if (!self::isUserCached($key)) {
-				throw new CacheException('Requested user is not in the cache.');
-			}
-			return self::$cache[$key];
-		}
-
-		/**
-		 * Add or overwrite a cached user.
-		 * @param string $key The account's cache key.
-		 * @param \Brush\Accounts\User $user The user instance to cache.
-		 */
-		private static final function setCachedUser($key, User $user) {
-			self::$cache[$key] = $user;
+		private static final function setCache(Cache $cache) {
+			self::$cache = $cache;
 		}
 
 		/**
 		 * This class should never be publically instantiated.
 		 */
 		private function __construct() {}
+
+		/**
+		 * Initialise static properties of this class.
+		 * This method should not be called from user code.
+		 */
+		public static function initialise() {
+			self::setCache(new Cache());
+		}
 
 		/**
 		 * Import information from a user element into this user.
@@ -282,9 +273,9 @@ namespace Brush\Accounts {
 		 */
 		public static final function fromAccount(Account $account, Developer $developer) {
 			$key = $account->getCacheKey($developer);
-			if (self::isUserCached($key)) {
+			if (self::getCache()->isCached($key)) {
 				// user cache hit
-				return self::getCachedUser($key);
+				return self::getCache()->get($key);
 			}
 
 			$request = new POSTRequest(Brush::API_BASE_URL . self::ENDPOINT);
@@ -307,7 +298,7 @@ namespace Brush\Accounts {
 				$dom = new DOMDocument('1.0', 'UTF-8');
 				$dom->loadXML($body);
 				$user = self::fromXml($dom->documentElement);
-				self::setCachedUser($key, $user);
+				self::getCache()->set($key, $user);
 				return $user;
 			}
 			catch (CrackleRequestException $e) {
@@ -316,4 +307,6 @@ namespace Brush\Accounts {
 			}
 		}
 	}
+
+	User::initialise();
 }
