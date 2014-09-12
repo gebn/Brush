@@ -3,7 +3,6 @@
 namespace Brush\Accounts {
 
 	use \Brush\Brush;
-	use \Brush\Pastes\Draft;
 	use \Brush\Utilities\Cache;
 	use \Brush\Exceptions\ApiException;
 	use \Brush\Exceptions\RequestException;

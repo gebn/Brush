@@ -3,7 +3,6 @@
 namespace Brush\Pastes {
 
 	use \Brush\Brush;
-	use \Brush\Accounts\Account;
 	use \Brush\Accounts\Developer;
 	use \Brush\Accounts\User;
 	use \Brush\Pastes\Options\Expiry;
@@ -17,8 +16,6 @@ namespace Brush\Pastes {
 
 	use \Crackle\Requests\POSTRequest;
 	use \Crackle\Exceptions\RequestException as CrackleRequestException;
-
-	use \DOMDocument;
 
 	/**
 	 * Represents a paste yet to be sent to Pastebin.

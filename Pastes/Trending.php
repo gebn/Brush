@@ -11,8 +11,6 @@ namespace Brush\Pastes {
 	use \Crackle\Requests\POSTRequest;
 	use \Crackle\Exceptions\RequestException as CrackleRequestException;
 
-	use \DOMDocument;
-
 	/**
 	 * Retrieves trending pastes.
 	 * @author George Brighton

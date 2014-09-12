@@ -7,13 +7,10 @@ namespace Brush\Accounts {
 	use \Brush\Utilities\Cache;
 	use \Brush\Exceptions\ApiException;
 	use \Brush\Exceptions\ArgumentException;
-	use \Brush\Exceptions\CacheException;
 	use \Brush\Exceptions\RequestException;
 
 	use \Crackle\Requests\POSTRequest;
 	use \Crackle\Exceptions\RequestException as CrackleRequestException;
-
-	use \DOMDocument;
 
 	/**
 	 * Represents a Pastebin account's identity. From a technical perspective, this is simply its session key.
