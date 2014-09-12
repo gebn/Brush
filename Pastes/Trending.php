@@ -49,32 +49,12 @@ namespace Brush\Pastes {
 				}
 
 				// must be success (the entire content is the key)
-				return self::parsePastes($body);
+				return Paste::parsePastes($body);
 			}
 			catch (CrackleRequestException $e) {
 				// transport failure
 				throw new RequestException($request);
 			}
-		}
-
-		/**
-		 * Parse a successful paste listing response.
-		 * @param string $response The response to parse.
-		 * @return array[\Brush\Pastes\Paste] The parsed pastes.
-		 */
-		private static function parsePastes($response) {
-			if ($response == 'No pastes found.') {
-				return array();
-			}
-
-			$dom = new DOMDocument('1.0', 'UTF-8');
-			$dom->loadXML('<pastes>' . $response . '</pastes>');
-
-			$pastes = array();
-			foreach ($dom->documentElement->getElementsByTagName('paste') as $paste) {
-				$pastes[] = Paste::fromXml($paste);
-			}
-			return $pastes;
 		}
 	}
 }

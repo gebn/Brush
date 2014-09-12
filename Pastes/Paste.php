@@ -16,6 +16,7 @@ namespace Brush\Pastes {
 	use \Crackle\Exceptions\RequestException as CrackleRequestException;
 
 	use \DOMElement;
+	use \DOMDocument;
 
 	/**
 	 * Represents a paste retrieved from Pastebin.
@@ -216,13 +217,34 @@ namespace Brush\Pastes {
 		 * @param \Brush\Accounts\Account $owner The optional owner of this paste. Omit if anonymous.
 		 * @return \Brush\Pastes\Paste The created paste.
 		 */
-		public static function fromXml(DOMElement $element, Account $owner = null) {
+		private static function fromXml(DOMElement $element, Account $owner = null) {
 			$paste = new Paste();
 			$paste->parse($element);
 			if ($owner !== null) {
 				$paste->setOwner($owner);
 			}
 			return $paste;
+		}
+
+		/**
+		 * Parse a successful paste listing response.
+		 * @param string $response The response to parse.
+		 * @param \Brush\Accounts\Account $owner The optional owner of these pastes.
+		 * @return array[\Brush\Pastes\Paste] The parsed pastes.
+		 */
+		public static function parsePastes($response, Account $owner = null) {
+			if ($response == 'No pastes found.') {
+				return array();
+			}
+
+			$dom = new DOMDocument('1.0', 'UTF-8');
+			$dom->loadXML('<pastes>' . $response . '</pastes>');
+
+			$pastes = array();
+			foreach ($dom->documentElement->getElementsByTagName('paste') as $paste) {
+				$pastes[] = Paste::fromXml($paste, $owner);
+			}
+			return $pastes;
 		}
 
 		/**
