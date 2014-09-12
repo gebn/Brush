@@ -36,13 +36,6 @@ namespace Brush\Pastes {
 		private $expiry;
 
 		/**
-		 * The account that owns this paste.
-		 * This is required if the visibility of this paste is private.
-		 * @var \Brush\Accounts\Account
-		 */
-		private $owner;
-
-		/**
 		 * Find when this paste expires.
 		 * @return string When this paste expires.
 		 */
@@ -56,31 +49,6 @@ namespace Brush\Pastes {
 		 */
 		public final function setExpiry($expiry) {
 			$this->expiry = $expiry;
-		}
-
-		/**
-		 * Retrieve the account that owns this paste.
-		 * @return \Brush\Accounts\Account The account that owns this paste.
-		 */
-		private final function getOwner() {
-			return $this->owner;
-		}
-
-		/**
-		 * Find whether this paste has an owner set.
-		 * If it doesn't, it cannot have private visibility.
-		 * @return boolean True if this paste has an assigned owner; false otherwise.
-		 */
-		private final function hasOwner() {
-			return $this->getOwner() !== null;
-		}
-
-		/**
-		 * Set the account that owns this paste.
-		 * @param \Brush\Accounts\Account $owner The account that owns this paste.
-		 */
-		public final function setOwner(Account $owner) {
-			$this->owner = $owner;
 		}
 
 		/**
@@ -153,9 +121,6 @@ namespace Brush\Pastes {
 		protected function addTo(POSTRequest $request, Developer $developer) {
 			parent::addTo($request, $developer);
 			$request->getVariables()->set('api_paste_expire_date', $this->getExpiry());
-			if ($this->hasOwner()) {
-				$this->getOwner()->sign($request, $developer);
-			}
 		}
 
 		/**

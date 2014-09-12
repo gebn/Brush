@@ -39,6 +39,13 @@ namespace Brush\Pastes {
 		private $visibility;
 
 		/**
+		 * The account that owns this paste.
+		 * This is required if the visibility of this paste is private.
+		 * @var \Brush\Accounts\Account
+		 */
+		private $owner;
+
+		/**
 		 * Retrieve the name of this paste.
 		 * @return string The name of this paste.
 		 */
@@ -103,6 +110,31 @@ namespace Brush\Pastes {
 		}
 
 		/**
+		 * Retrieve the account that owns this paste.
+		 * @return \Brush\Accounts\Account The account that owns this paste.
+		 */
+		protected final function getOwner() {
+			return $this->owner;
+		}
+
+		/**
+		 * Find whether this paste has an owner set.
+		 * If it doesn't, it cannot have private visibility.
+		 * @return boolean True if this paste has an assigned owner; false otherwise.
+		 */
+		protected final function hasOwner() {
+			return $this->getOwner() !== null;
+		}
+
+		/**
+		 * Set the account that owns this paste.
+		 * @param \Brush\Accounts\Account $owner The account that owns this paste.
+		 */
+		public final function setOwner(Account $owner) {
+			$this->owner = $owner;
+		}
+
+		/**
 		 * Initialise properties to defaults.
 		 */
 		protected function __construct() {
@@ -132,6 +164,9 @@ namespace Brush\Pastes {
 			$variables->set('api_paste_code', $this->getContent());
 			$variables->set('api_paste_private', $this->getVisibility());
 			$this->getFormat()->addTo($request);
+			if ($this->hasOwner()) {
+				$this->getOwner()->sign($request, $developer);
+			}
 		}
 	}
 }

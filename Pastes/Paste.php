@@ -2,10 +2,16 @@
 
 namespace Brush\Pastes {
 
-	use \Brush\Exceptions\RequestException;
+	use \Brush\Brush;
+	use \Brush\Accounts\Account;
+	use \Brush\Accounts\Developer;
+	use \Brush\Exceptions\ApiException;
 	use \Brush\Exceptions\ArgumentException;
+	use \Brush\Exceptions\RequestException;
+	use \Brush\Exceptions\ValidationException;
 
 	use \Crackle\Requests\GETRequest;
+	use \Crackle\Requests\POSTRequest;
 	use \Crackle\Exceptions\RequestException as CrackleRequestException;
 
 	use \DOMElement;
@@ -15,6 +21,12 @@ namespace Brush\Pastes {
 	 * @author George Brighton
 	 */
 	class Paste extends AbstractPaste {
+
+		/**
+		 * Pastebin's relative endpoint for deleting pastes.
+		 * @var string
+		 */
+		const DELETE_ENDPOINT = 'api_post.php';
 
 		/**
 		 * The unique ID of this paste.
@@ -200,11 +212,13 @@ namespace Brush\Pastes {
 		/**
 		 * Create a paste instance from its XML representation.
 		 * @param \DOMElement $element The `<paste>` element to parse.
+		 * @param \Brush\Accounts\Account $owner The optional owner of this paste. Omit if anonymous.
 		 * @return \Brush\Pastes\Paste The created paste.
 		 */
-		public static function fromXml(DOMElement $element) {
+		public static function fromXml(DOMElement $element, Account $owner = null) {
 			$paste = new Paste();
 			$paste->parse($element);
+			$paste->setOwner($owner);
 			return $paste;
 		}
 
@@ -249,6 +263,44 @@ namespace Brush\Pastes {
 			$this->setSize(strlen($draft->getContent()));
 			$this->setFormat($draft->getFormat());
 			$this->setVisibility($draft->getVisibility());
+		}
+
+		/**
+		 * Remove this paste from Pastebin.
+		 * @param \Brush\Accounts\Developer $developer The developer account to use for the request.
+		 * @throws \Brush\Exceptions\ValidationException If this paste does not have an owner (e.g. it was retrieved via the trending pastes API).
+		 * @throws \Brush\Exceptions\ApiException If Pastebin reports an error.
+		 * @throws \Brush\Exceptions\RequestException If a network error occurs.
+		 */
+		public function delete(Developer $developer) {
+
+			// we can only delete pastes for which an Account is set
+			if (!$this->hasOwner()) {
+				throw new ValidationException('A paste must have an owner to be deleted.');
+			}
+
+			$request = new POSTRequest(Brush::API_BASE_URL . self::DELETE_ENDPOINT);
+			curl_setopt($request->getHandle(), CURLOPT_SSL_VERIFYPEER, false);
+
+			$developer->sign($request);
+			$this->getOwner()->sign($request, $developer);
+			$request->getVariables()->set('api_paste_key', $this->getKey());
+
+			try {
+				// send the request and get the response body
+				$body = $request->getResponse()->getBody();
+
+				// identify error from prefix (Pastebin does not use HTTP status codes)
+				if (substr($body, 0, 15) == 'Bad API request') {
+					throw new ApiException('Failed to retrieve user key: ' . substr($body, 17));
+				}
+
+				// success
+			}
+			catch (CrackleRequestException $e) {
+				// transport failure
+				throw new RequestException($request);
+			}
 		}
 	}
 }
