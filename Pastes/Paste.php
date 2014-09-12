@@ -218,7 +218,9 @@ namespace Brush\Pastes {
 		public static function fromXml(DOMElement $element, Account $owner = null) {
 			$paste = new Paste();
 			$paste->parse($element);
-			$paste->setOwner($owner);
+			if ($owner !== null) {
+				$paste->setOwner($owner);
+			}
 			return $paste;
 		}
 
