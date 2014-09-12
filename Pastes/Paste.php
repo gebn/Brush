@@ -61,7 +61,7 @@ namespace Brush\Pastes {
 		 * Retrieve the unique ID of this paste.
 		 * @return string The unique ID of this paste.
 		 */
-		private final function getKey() {
+		public final function getKey() {
 			return $this->key;
 		}
 
@@ -69,7 +69,7 @@ namespace Brush\Pastes {
 		 * Retrieve the URL of this paste.
 		 * @return string The URL of this paste.
 		 */
-		private function getUrl() {
+		public function getUrl() {
 			return 'http://pastebin.com/' . $this->getKey();
 		}
 
@@ -99,7 +99,7 @@ namespace Brush\Pastes {
 		 * Find when this paste was submitted, as a UNIX timestamp.
 		 * @return int When this paste was submitted, as a UNIX timestamp.
 		 */
-		private final function getDate() {
+		public final function getDate() {
 			return $this->date;
 		}
 
@@ -115,7 +115,7 @@ namespace Brush\Pastes {
 		 * Retrieve the size of the content of this paste, in bytes.
 		 * @return int The size of the content of this paste, in bytes.
 		 */
-		private final function getSize() {
+		public final function getSize() {
 			return $this->size;
 		}
 
@@ -131,7 +131,7 @@ namespace Brush\Pastes {
 		 * Retrieve the number of visits this paste has seen.
 		 * @return int The number of visits this paste has seen.
 		 */
-		private final function getHits() {
+		public final function getHits() {
 			return $this->hits;
 		}
 
@@ -148,7 +148,7 @@ namespace Brush\Pastes {
 		 * N.B. 0 means this paste never expires.
 		 * @return int When this paste expires, as a UNIX timestamp.
 		 */
-		private final function getExpires() {
+		public final function getExpires() {
 			return $this->expires;
 		}
 
@@ -156,7 +156,7 @@ namespace Brush\Pastes {
 		 * Find whether this paste has no expiry date.
 		 * @return boolean True if it will never expire, false if it will at some point.
 		 */
-		private final function isImmortal() {
+		public final function isImmortal() {
 			return $this->getExpires() == 0;
 		}
 
@@ -164,7 +164,7 @@ namespace Brush\Pastes {
 		 * Find how long this paste expires in.
 		 * @return int 0 if this paste never expires, otherwise the number of seconds in which it will expire.
 		 */
-		private final function getExpiresIn() {
+		public final function getExpiresIn() {
 			return $this->isImmortal() ? 0 : $this->getExpires() - time();
 		}
 
