@@ -3,6 +3,7 @@
 namespace Brush\Pastes {
 
 	use \Brush\Accounts\Developer;
+	use \Brush\Accounts\Account;
 
 	use \Crackle\Requests\POSTRequest;
 
