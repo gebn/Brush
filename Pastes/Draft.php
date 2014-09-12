@@ -166,7 +166,7 @@ namespace Brush\Pastes {
 		 */
 		public static function fromFile($path) {
 			if (!is_readable($path)) {
-				throw new IOException(sprintf('Cannot read from \'%s\'. Check file permissions.'));
+				throw new IOException(sprintf('Cannot read from \'%s\'. Check file permissions.', $path));
 			}
 
 			$draft = new Draft();
