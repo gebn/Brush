@@ -80,9 +80,9 @@ namespace Brush\Pastes {
 			curl_setopt($request->getHandle(), CURLOPT_SSL_VERIFYPEER, false);
 
 			// add POST variables
-			$request->getVariables()->set('api_option', 'paste');
 			$developer->sign($request);
 			$this->addTo($request, $developer);
+			$request->getVariables()->set('api_option', 'paste');
 
 			try {
 				// send the request and get the response body
