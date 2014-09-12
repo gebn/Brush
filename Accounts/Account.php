@@ -145,10 +145,10 @@ namespace Brush\Accounts {
 			$request = new POSTRequest(Brush::API_BASE_URL . self::ENDPOINT);
 			curl_setopt($request->getHandle(), CURLOPT_SSL_VERIFYPEER, false);
 
-			try {
-				$this->getCredentials()->sign($request);
-				$developer->sign($request);
+			$this->getCredentials()->sign($request);
+			$developer->sign($request);
 
+			try {
 				// send the request and get the response body
 				$body = $request->getResponse()->getBody();
 
