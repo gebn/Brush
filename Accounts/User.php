@@ -2,6 +2,8 @@
 
 namespace Brush\Accounts {
 
+	use Brush\Exceptions\CacheException;
+
 	use \Brush\Brush;
 	use \Brush\Pastes\Draft;
 	use \Brush\Exceptions\ApiException;
@@ -80,6 +82,13 @@ namespace Brush\Accounts {
 		 * @var \Brush\Accounts\Defaults
 		 */
 		private $defaults;
+
+		/**
+		 * An internal cache of user objects.
+		 * Organised as cache key => user.
+		 * @var array[\Brush\Accounts\User]
+		 */
+		private static $cache;
 
 		/**
 		 * Retrieve this user's username.
@@ -202,6 +211,37 @@ namespace Brush\Accounts {
 		}
 
 		/**
+		 * Find whether a user instance is cached.
+		 * @param string $key The account's cache key.
+		 * @return boolean True if it is, false if it isn't.
+		 */
+		private static final function isUserCached($key) {
+			return isset(self::$cache[$key]);
+		}
+
+		/**
+		 * Retrieve a user from the cache.
+		 * @param string $key The account's cache key.
+		 * @throws \Brush\Exceptions\CacheException If the user is not cached.
+		 * @return \Brush\Accounts\User The cache user.
+		 */
+		private static final function getCachedUser($key) {
+			if (!self::isUserCached($key)) {
+				throw new CacheException('Requested user is not in the cache.');
+			}
+			return self::$cache[$key];
+		}
+
+		/**
+		 * Add or overwrite a cached user.
+		 * @param string $key The account's cache key.
+		 * @param \Brush\Accounts\User $user The user instance to cache.
+		 */
+		private static final function setCachedUser($key, User $user) {
+			self::$cache[$key] = $user;
+		}
+
+		/**
 		 * This class should never be publically instantiated.
 		 */
 		private function __construct() {}
@@ -241,6 +281,12 @@ namespace Brush\Accounts {
 		 * @return \Brush\Accounts\User A user instance containing the account's information.
 		 */
 		public static final function fromAccount(Account $account, Developer $developer) {
+			$key = $account->getCacheKey($developer);
+			if (self::isUserCached($key)) {
+				// user cache hit
+				return self::getCachedUser($key);
+			}
+
 			$request = new POSTRequest(Brush::API_BASE_URL . self::ENDPOINT);
 			curl_setopt($request->getHandle(), CURLOPT_SSL_VERIFYPEER, false);
 
@@ -260,7 +306,9 @@ namespace Brush\Accounts {
 				// must be success
 				$dom = new DOMDocument('1.0', 'UTF-8');
 				$dom->loadXML($body);
-				return self::fromXml($dom->documentElement);
+				$user = self::fromXml($dom->documentElement);
+				self::setCachedUser($key, $user);
+				return $user;
 			}
 			catch (CrackleRequestException $e) {
 				// transport failure

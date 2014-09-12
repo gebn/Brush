@@ -141,6 +141,15 @@ namespace Brush\Accounts {
 		}
 
 		/**
+		 * Get a string unique to this account, suitable for caching.
+		 * @param \Brush\Accounts\Developer $developer The developer to use for any necessary requests.
+		 * @return string This account's cache key.
+		 */
+		public function getCacheKey(Developer $developer) {
+			return md5($this->getKey($developer));
+		}
+
+		/**
 		 * Find the API user key for this account.
 		 * @param \Brush\Accounts\Developer $developer The developer account to use for the request.
 		 * @return string The user's key.
