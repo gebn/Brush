@@ -105,7 +105,7 @@ namespace Brush\Accounts {
 		 * @return \Brush\Accounts\Defaults The created settings container.
 		 */
 		public static final function fromXml(DOMElement $element) {
-			$defaults = new static();
+			$defaults = new Defaults();
 			$defaults->parse($element);
 			return $defaults;
 		}

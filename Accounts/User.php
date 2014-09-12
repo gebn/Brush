@@ -251,7 +251,7 @@ namespace Brush\Accounts {
 		 * @return \Brush\Accounts\User The created user.
 		 */
 		private static final function fromXml(DOMElement $element) {
-			$user = new static();
+			$user = new User();
 			$user->parse($element);
 			return $user;
 		}
