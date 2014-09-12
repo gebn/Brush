@@ -5,6 +5,7 @@ namespace Brush\Pastes {
 	use \Brush\Brush;
 	use \Brush\Accounts\Account;
 	use \Brush\Accounts\Developer;
+	use \Brush\Pastes\Options\Expiry;
 	use \Brush\Exceptions\ApiException;
 	use \Brush\Exceptions\ArgumentException;
 	use \Brush\Exceptions\RequestException;

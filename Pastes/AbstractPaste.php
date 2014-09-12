@@ -5,6 +5,7 @@ namespace Brush\Pastes {
 	use \Brush\Accounts\Developer;
 	use \Brush\Accounts\Account;
 	use \Brush\Pastes\Options\Format;
+	use \Brush\Pastes\Options\Visibility;
 
 	use \Crackle\Requests\POSTRequest;
 
