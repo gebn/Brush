@@ -1,6 +1,6 @@
 <?php
 
-namespace Brush\Pastes {
+namespace Brush\Pastes\Options {
 
 	/**
 	 * Container for visibility constants, used to set the visibility of new pastes and compare that of existing ones.

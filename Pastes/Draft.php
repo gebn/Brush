@@ -6,6 +6,7 @@ namespace Brush\Pastes {
 	use \Brush\Accounts\Account;
 	use \Brush\Accounts\Developer;
 	use \Brush\Accounts\User;
+	use \Brush\Pastes\Options\Format;
 	use \Brush\Exceptions\ApiException;
 	use \Brush\Exceptions\IOException;
 	use \Brush\Exceptions\RequestException;

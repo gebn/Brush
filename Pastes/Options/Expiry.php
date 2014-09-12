@@ -1,6 +1,6 @@
 <?php
 
-namespace Brush\Pastes {
+namespace Brush\Pastes\Options {
 
 	use \Brush\Exceptions\ArgumentException;
 

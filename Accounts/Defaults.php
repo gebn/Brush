@@ -3,7 +3,7 @@
 namespace Brush\Accounts {
 
 	use \Brush\Pastes\Draft;
-	use \Brush\Pastes\Format;
+	use \Brush\Pastes\Options\Format;
 
 	use \DOMElement;
 
@@ -15,7 +15,7 @@ namespace Brush\Accounts {
 
 		/**
 		 * The format of new pastes.
-		 * @var \Brush\Pastes\Format
+		 * @var \Brush\Pastes\Options\Format
 		 */
 		private $format;
 
@@ -33,7 +33,7 @@ namespace Brush\Accounts {
 
 		/**
 		 * Retrieve the format of new pastes.
-		 * @return \Brush\Pastes\Format The format of new pastes.
+		 * @return \Brush\Pastes\Options\Format The format of new pastes.
 		 */
 		private final function getFormat() {
 			return $this->format;
@@ -41,7 +41,7 @@ namespace Brush\Accounts {
 
 		/**
 		 * Set the format of new pastes.
-		 * @param \Brush\Pastes\Format $format The format of new pastes.
+		 * @param \Brush\Pastes\Options\Format $format The format of new pastes.
 		 */
 		private final function setFormat(Format $format) {
 			$this->format = $format;

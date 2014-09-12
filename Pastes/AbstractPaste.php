@@ -4,6 +4,7 @@ namespace Brush\Pastes {
 
 	use \Brush\Accounts\Developer;
 	use \Brush\Accounts\Account;
+	use \Brush\Pastes\Options\Format;
 
 	use \Crackle\Requests\POSTRequest;
 
@@ -29,7 +30,7 @@ namespace Brush\Pastes {
 
 		/**
 		 * The format of this paste.
-		 * @var \Brush\Pastes\Format
+		 * @var \Brush\Pastes\Options\Format
 		 */
 		private $format;
 
@@ -80,7 +81,7 @@ namespace Brush\Pastes {
 
 		/**
 		 * Retrieve the format of this paste.
-		 * @return \Brush\Pastes\Format The format of this paste.
+		 * @return \Brush\Pastes\Options\Format The format of this paste.
 		 */
 		public final function getFormat() {
 			return $this->format;
@@ -88,7 +89,7 @@ namespace Brush\Pastes {
 
 		/**
 		 * Set the format of this paste.
-		 * @param \Brush\Pastes\Format $format The format of this paste.
+		 * @param \Brush\Pastes\Options\Format $format The format of this paste.
 		 */
 		public final function setFormat(Format $format) {
 			$this->format = $format;
