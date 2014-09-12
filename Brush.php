@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Brush is a complete object-oriented PHP wrapper for the PasteBin API.
+ * Brush is a complete object-oriented PHP wrapper for the Pastebin API.
  * @author George Brighton
  * @link https://github.com/gebn/Brush
  */
