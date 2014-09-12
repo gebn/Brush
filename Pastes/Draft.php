@@ -2,20 +2,17 @@
 
 namespace Brush\Pastes {
 
-	use \Brush\Brush;
 	use \Brush\Accounts\Developer;
 	use \Brush\Accounts\User;
 	use \Brush\Pastes\Options\Expiry;
 	use \Brush\Pastes\Options\Format;
 	use \Brush\Pastes\Options\Visibility;
-	use \Brush\Exceptions\ApiException;
+	use \Brush\Utilities\ApiRequest;
 	use \Brush\Exceptions\IOException;
-	use \Brush\Exceptions\RequestException;
 	use \Brush\Exceptions\FormatException;
 	use \Brush\Exceptions\ValidationException;
 
 	use \Crackle\Requests\POSTRequest;
-	use \Crackle\Exceptions\RequestException as CrackleRequestException;
 
 	/**
 	 * Represents a paste yet to be sent to Pastebin.
@@ -67,39 +64,20 @@ namespace Brush\Pastes {
 		/**
 		 * Submit this draft paste to the Pastebin API.
 		 * @param \Brush\Accounts\Developer $developer The developer account to use to send the request.
-		 * @throws \Brush\Exceptions\ApiException If the Pastebin API returns failure. Check the message for the cause.
-		 * @throws \Brush\Exceptions\RequestException If the request to Pastebin cannot be sent.
+		 * @return \Brush\Pastes\Paste The created paste.
 		 */
 		public function paste(Developer $developer) {
 
 			// throw on any errors
 			$this->validate();
 
-			// draft is ready; create the request that will send it
-			$request = new POSTRequest(Brush::API_BASE_URL . self::ENDPOINT);
-			curl_setopt($request->getHandle(), CURLOPT_SSL_VERIFYPEER, false);
+			// create the request
+			$pastebin = new ApiRequest($developer, self::ENDPOINT);
+			$pastebin->setOption('paste');
+			$this->addTo($pastebin->getRequest(), $developer);
 
-			// add POST variables
-			$developer->sign($request);
-			$this->addTo($request, $developer);
-			$request->getVariables()->set('api_option', 'paste');
-
-			try {
-				// send the request and get the response body
-				$body = $request->getResponse()->getBody();
-
-				// identify error from prefix (Pastebin does not use HTTP status codes)
-				if (substr($body, 0, 15) == 'Bad API request') {
-					throw new ApiException('Failed submit paste: ' . substr($body, 17));
-				}
-
-				// must be success; create and return a paste
-				return Paste::fromPasted($body, $this);
-			}
-			catch (CrackleRequestException $e) {
-				// transport failure
-				throw new RequestException($request);
-			}
+			// send and create a paste from this draft
+			return Paste::fromPasted($pastebin->send(), $this);
 		}
 
 		/**

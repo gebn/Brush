@@ -30,12 +30,6 @@ namespace Brush {
 		const VERSION = '0.1';
 
 		/**
-		 * The base address of all API endpoints.
-		 * @var string
-		 */
-		const API_BASE_URL = 'https://pastebin.com/api/';
-
-		/**
 		 * This class should not be instantiated.
 		 */
 		private function __construct() {}

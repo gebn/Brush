@@ -2,21 +2,18 @@
 
 namespace Brush\Pastes {
 
-	use \Brush\Brush;
 	use \Brush\Accounts\Account;
 	use \Brush\Accounts\Developer;
 	use \Brush\Pastes\Options\Expiry;
-	use \Brush\Exceptions\ApiException;
+	use \Brush\Utilities\ApiRequest;
 	use \Brush\Exceptions\ArgumentException;
 	use \Brush\Exceptions\RequestException;
 	use \Brush\Exceptions\ValidationException;
 
 	use \Crackle\Requests\GETRequest;
-	use \Crackle\Requests\POSTRequest;
 	use \Crackle\Exceptions\RequestException as CrackleRequestException;
 
 	use \DOMElement;
-	use \DOMDocument;
 
 	/**
 	 * Represents a paste retrieved from Pastebin.
@@ -87,7 +84,7 @@ namespace Brush\Pastes {
 		/**
 		 * Set this paste's URL.
 		 * @param string $url This paste's URL.
-		 * @throws InvalidArgumentException If the URL isn't in the correct format.
+		 * @throws \Brush\Exceptions\ArgumentException If the URL isn't in the correct format.
 		 */
 		private final function setUrl($url) {
 			$url = rtrim($url, '/');
@@ -237,11 +234,8 @@ namespace Brush\Pastes {
 				return array();
 			}
 
-			$dom = new DOMDocument('1.0', 'UTF-8');
-			$dom->loadXML('<pastes>' . $response . '</pastes>');
-
 			$pastes = array();
-			foreach ($dom->documentElement->getElementsByTagName('paste') as $paste) {
+			foreach (ApiRequest::toElement('<pastes>' . $response . '</pastes>')->getElementsByTagName('paste') as $paste) {
 				$pastes[] = Paste::fromXml($paste, $owner);
 			}
 			return $pastes;
@@ -294,9 +288,8 @@ namespace Brush\Pastes {
 		/**
 		 * Remove this paste from Pastebin.
 		 * @param \Brush\Accounts\Developer $developer The developer account to use for the request.
-		 * @throws \Brush\Exceptions\ValidationException If this paste does not have an owner (e.g. it was retrieved via the trending pastes API).
-		 * @throws \Brush\Exceptions\ApiException If Pastebin reports an error.
-		 * @throws \Brush\Exceptions\RequestException If a network error occurs.
+		 * @throws \Brush\Exceptions\ValidationException If this paste does not have an owner
+		 *                                               (e.g. it was retrieved via the trending pastes API).
 		 */
 		public function delete(Developer $developer) {
 
@@ -305,28 +298,14 @@ namespace Brush\Pastes {
 				throw new ValidationException('A paste must have an owner to be deleted.');
 			}
 
-			$request = new POSTRequest(Brush::API_BASE_URL . self::DELETE_ENDPOINT);
-			curl_setopt($request->getHandle(), CURLOPT_SSL_VERIFYPEER, false);
+			$pastebin = new ApiRequest($developer, self::DELETE_ENDPOINT);
+			$pastebin->setOption('delete');
 
-			$developer->sign($request);
+			$request = $pastebin->getRequest();
 			$this->getOwner()->sign($request, $developer);
 			$request->getVariables()->set('api_paste_key', $this->getKey());
 
-			try {
-				// send the request and get the response body
-				$body = $request->getResponse()->getBody();
-
-				// identify error from prefix (Pastebin does not use HTTP status codes)
-				if (substr($body, 0, 15) == 'Bad API request') {
-					throw new ApiException('Failed to retrieve user key: ' . substr($body, 17));
-				}
-
-				// success
-			}
-			catch (CrackleRequestException $e) {
-				// transport failure
-				throw new RequestException($request);
-			}
+			$pastebin->send();
 		}
 	}
 }

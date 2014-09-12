@@ -2,15 +2,12 @@
 
 namespace Brush\Accounts {
 
-	use \Brush\Brush;
 	use \Brush\Pastes\Paste;
 	use \Brush\Utilities\Cache;
-	use \Brush\Exceptions\ApiException;
+	use \Brush\Utilities\ApiRequest;
 	use \Brush\Exceptions\ArgumentException;
-	use \Brush\Exceptions\RequestException;
 
 	use \Crackle\Requests\POSTRequest;
-	use \Crackle\Exceptions\RequestException as CrackleRequestException;
 
 	/**
 	 * Represents a Pastebin account's identity. From a technical perspective, this is simply its session key.
@@ -143,36 +140,15 @@ namespace Brush\Accounts {
 		 * Find the API user key for this account.
 		 * @param \Brush\Accounts\Developer $developer The developer account to use for the request.
 		 * @return string The user's key.
-		 * @throws \Brush\Exceptions\ApiException If Pastebin indicates an error in the request.
-		 * @throws \Brush\Exceptions\RequestException If the request to Pastebin fails.
 		 */
 		private function fetchKey(Developer $developer) {
 
 			// if this method is being called, we should always have credentials available
 			assert($this->getCredentials() !== null);
 
-			$request = new POSTRequest(Brush::API_BASE_URL . self::LOGIN_ENDPOINT);
-			curl_setopt($request->getHandle(), CURLOPT_SSL_VERIFYPEER, false);
-
-			$this->getCredentials()->sign($request);
-			$developer->sign($request);
-
-			try {
-				// send the request and get the response body
-				$body = $request->getResponse()->getBody();
-
-				// identify error from prefix (Pastebin does not use HTTP status codes)
-				if (substr($body, 0, 15) == 'Bad API request') {
-					throw new ApiException('Failed to retrieve user key: ' . substr($body, 17));
-				}
-
-				// must be success (the entire content is the key)
-				return $body;
-			}
-			catch (CrackleRequestException $e) {
-				// transport failure
-				throw new RequestException($request);
-			}
+			$pastebin = new ApiRequest($developer, self::LOGIN_ENDPOINT);
+			$this->getCredentials()->sign($pastebin->getRequest());
+			return $pastebin->send();
 		}
 
 		/**
@@ -189,8 +165,6 @@ namespace Brush\Accounts {
 		 * @param \Brush\Accounts\Developer $developer The developer account to use for the request.
 		 * @param int $number The maximum number of pastes to retrieve. 1 <= $number <= 1000. Defaults to 50.
 		 * @throws \Brush\Exceptions\ArgumentException If the number of pastes is outside the allowed range.
-		 * @throws \Brush\Exceptions\ApiException If Pastebin indicates an error in the request.
-		 * @throws \Brush\Exceptions\RequestException If the request to Pastebin fails.
 		 * @return array[\Brush\Pastes\Paste] This account's pastes, up to the limit.
 		 */
 		public function getPastes(Developer $developer, $number = 50) {
@@ -200,32 +174,14 @@ namespace Brush\Accounts {
 				throw new ArgumentException('The number of pastes must be in the range 1 to 1000 inclusive.');
 			}
 
-			$request = new POSTRequest(Brush::API_BASE_URL . self::PASTES_ENDPOINT);
-			curl_setopt($request->getHandle(), CURLOPT_SSL_VERIFYPEER, false);
+			$pastebin = new ApiRequest($developer, self::PASTES_ENDPOINT);
+			$pastebin->setOption('list');
 
-			$developer->sign($request);
+			$request = $pastebin->getRequest();
 			$this->sign($request, $developer);
+			$request->getVariables()->set('api_results_limit', $number);
 
-			$variables = $request->getVariables();
-			$variables->set('api_option', 'list');
-			$variables->set('api_results_limit', $number);
-
-			try {
-				// send the request and get the response body
-				$body = $request->getResponse()->getBody();
-
-				// identify error from prefix (Pastebin does not use HTTP status codes)
-				if (substr($body, 0, 15) == 'Bad API request') {
-					throw new ApiException('Failed to retrieve user key: ' . substr($body, 17));
-				}
-
-				// must be success (the entire content is the key)
-				return Paste::parsePastes($body, $this);
-			}
-			catch (CrackleRequestException $e) {
-				// transport failure
-				throw new RequestException($request);
-			}
+			return Paste::parsePastes($pastebin->send(), $this);
 		}
 	}
 

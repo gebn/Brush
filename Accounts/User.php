@@ -2,16 +2,10 @@
 
 namespace Brush\Accounts {
 
-	use \Brush\Brush;
 	use \Brush\Utilities\Cache;
-	use \Brush\Exceptions\ApiException;
-	use \Brush\Exceptions\RequestException;
-
-	use \Crackle\Requests\POSTRequest;
-	use \Crackle\Exceptions\RequestException as CrackleRequestException;
+	use \Brush\Utilities\ApiRequest;
 
 	use \DOMElement;
-	use \DOMDocument;
 
 	/**
 	 * Represents a user's information.
@@ -266,8 +260,6 @@ namespace Brush\Accounts {
 		 * Retrieve a user's information from their account.
 		 * @param \Brush\Accounts\Account $account The account whose corresponding information to retrieve.
 		 * @param \Brush\Accounts\Developer $developer The developer account to use for the request.
-		 * @throws \Brush\Exceptions\ApiException If Pastebin indicates an error in our request.
-		 * @throws \Brush\Exceptions\RequestException If our request to Pastebin's API fails.
 		 * @return \Brush\Accounts\User A user instance containing the account's information.
 		 */
 		public static final function fromAccount(Account $account, Developer $developer) {
@@ -277,33 +269,13 @@ namespace Brush\Accounts {
 				return self::getCache()->get($key);
 			}
 
-			$request = new POSTRequest(Brush::API_BASE_URL . self::ENDPOINT);
-			curl_setopt($request->getHandle(), CURLOPT_SSL_VERIFYPEER, false);
+			$pastebin = new ApiRequest($developer, self::ENDPOINT);
+			$pastebin->setOption('userdetails');
+			$account->sign($pastebin->getRequest(), $developer);
 
-			$developer->sign($request);
-			$account->sign($request, $developer);
-			$request->getVariables()->set('api_option', 'userdetails');
-
-			try {
-				// send the request and get the response body
-				$body = $request->getResponse()->getBody();
-
-				// identify error from prefix (Pastebin does not use HTTP status codes)
-				if (substr($body, 0, 15) == 'Bad API request') {
-					throw new ApiException('Failed to retrieve user key: ' . substr($body, 17));
-				}
-
-				// must be success
-				$dom = new DOMDocument('1.0', 'UTF-8');
-				$dom->loadXML($body);
-				$user = self::fromXml($dom->documentElement);
-				self::getCache()->set($key, $user);
-				return $user;
-			}
-			catch (CrackleRequestException $e) {
-				// transport failure
-				throw new RequestException($request);
-			}
+			$user = self::fromXml(ApiRequest::toElement($pastebin->send()));
+			self::getCache()->set($key, $user);
+			return $user;
 		}
 	}
 
