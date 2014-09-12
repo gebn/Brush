@@ -228,6 +228,7 @@ namespace Brush\Pastes {
 		 */
 		protected function parse(DOMElement $paste) {
 			parent::parse($paste);
+			$this->setKey($paste->getElementsByTagName('paste_key')->item(0)->nodeValue);
 			$this->setDate($paste->getElementsByTagName('paste_date')->item(0)->nodeValue);
 			$this->setSize($paste->getElementsByTagName('paste_size')->item(0)->nodeValue);
 			$this->setExpires($paste->getElementsByTagName('paste_expire_date')->item(0)->nodeValue);
