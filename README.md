@@ -102,6 +102,8 @@ The `Account` class represents a Pastebin account. At the lowest level, it manag
  1. Via a set of credentials, as above. Brush will make an HTTP request to Pastebin to retrieve a new user key when one is first needed, and will cache it for the rest of execution.
  2. Directly by passing a session key string as the only argument to `Account`'s constructor. This saves a request, and is the recommended way if you always want to work with the same account.
 
+In the above example, instead of manually writing a draft, we asked Brush to automatically create one from a local file. Brush will set the draft title to the name of the file, the content as the file content, and attempt to recognise the format from the file's extension. The mappings it uses to do this are in `Configuration/extensions.ini`. This is designed to be edited by you, so feel free to add lines according to your requirements. If you add a large number of maps, please consider contributing them in a pull request so that others may benefit!
+
 ### Retrieve an account's pastes
 
 Retrieving pastes belonging to an account is easy:
