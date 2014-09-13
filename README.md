@@ -65,6 +65,7 @@ use \Brush\Accounts\Developer;
 use \Brush\Accounts\Account;
 use \Brush\Accounts\Credentials;
 use \Brush\Pastes\Draft;
+use \Brush\Pastes\Options\Visibility;
 use \Brush\Exceptions\BrushException;
 
 // an account object represents a Pastebin user account
@@ -75,6 +76,9 @@ $draft = Draft::fromFile('passwords.txt');
 
 // link the draft to the account we specified above
 $draft->setOwner($account);
+
+// specify that we don't want this paste to be visible outside the account
+$draft->setVisibility(Visibility::VISIBILITY_PRIVATE);
 
 // the Developer class manages a developer key and the signing of requests with it
 $developer = new Developer('<developer key>');
