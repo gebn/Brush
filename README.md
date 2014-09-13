@@ -44,9 +44,10 @@ There are several things to note:
 
  - You only ever need to require `Brush.php`; Brush has an autoloader, which will take care of other includes for you.
  - The `Draft` class represents a paste not yet submitted to Pastebin. It has setters allowing you to configure every possible option for your new paste, including expiry, format and visibility.
- - Brush validates drafts before attempting to send them to Pastebin. If an error is detected (e.g. no content set), then a `ValidationException` will be thrown when attempting to `paste()` the draft.
  - The `Developer` class represents a developer account. A developer instance needs to be provided for all interaction with the Pastebin API.
+ - Brush validates drafts before attempting to send them to Pastebin. If an error is detected (e.g. no content set), then a `ValidationException` will be thrown when attempting to `paste()` the draft.
  - Once a draft is `paste()`d, Brush will return a `Paste` object. This contains all information about the paste, including as its key, URL and expiry date.
+ - For a complete method reference, see [METHODS.md](METHODS.md).
 
 ### Create a private paste
 
@@ -63,8 +64,7 @@ use \Brush\Exceptions\BrushException;
 
 $account = new Account(new Credentials('<username>', '<password>'));
 
-$draft = new Draft();
-$draft->setContent('Paste content');
+$draft = Draft::fromFile('passwords.txt');
 $draft->setOwner($account);
 
 $developer = new Developer('<developer key>');
