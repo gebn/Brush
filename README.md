@@ -49,14 +49,15 @@ There are several things to note:
 
  - You only ever need to require `Brush.php`; Brush has an autoloader, which will take care of other includes for you.
  - The `Draft` class represents a paste not yet submitted to Pastebin. It has setters allowing you to configure every possible option for your new paste, including expiry, format and visibility.
- - The `Developer` class represents a developer account. A developer instance needs to be provided for all interaction with the Pastebin API.
- - Brush validates drafts before attempting to send them to Pastebin. If an error is detected (e.g. no content set), then a `ValidationException` will be thrown when attempting to `paste()` the draft.
- - Once a draft is `paste()`d, Brush will return a `Paste` object. This contains all information about the paste, including as its key, URL and expiry date.
+ - The `Developer` class represents a developer account. An instance needs to be passed in all situations where Brush could interact with the Pastebin API.
+ - When `paste()` is called on a draft, Brush checks for basic errors before attempting to send the draft to Pastebin. If an error is detected (e.g. no content set), a `ValidationException` will be thrown.
+ - All exceptions thrown by Brush extend `BrushException`. This allows you to easily handle every single possible error in a single `catch` clause, or use multiple clauses for more fine-grained handling.
+ - Once a draft is `paste()`d, Brush automatically creates and return a `Paste` object without any further interaction with the Pastebin API. This object contains all information about the paste, including its key, URL and expiry date.
  - For a complete method reference, see [METHODS.md](METHODS.md).
 
 ### Create a private paste
 
-Private pastes require a user account, but Brush makes this easy to set up.
+Private pastes must have an account associated with them, but Brush makes this easy to set up:
 
 ``` php
 require '../Brush.php';
@@ -92,11 +93,14 @@ catch (BrushException $e) {
 }
 ```
 
-The `Account` class represents a Pastebin account. It can be created from a set of credentials as above, or directly from a user session key. Once you have create an account object, you simply need to call `setOwner()` on the draft passing it as the only argument. When the draft is pasted, Brush will make sure the draft is associated with the specified account.
+The `Account` class represents a Pastebin account. At the lowest level, it manages a user session key, which has to be provided when doing operations affecting a particular account. An instance can be created in two ways:
+
+ 1. Via a set of credentials, as above. Brush will make an HTTP request to Pastebin when a user key is first needed, and cache it for the rest of execution.
+ 2. Directly by passing a session key string as the only argument to `Account`'s constructor. This saves a request, and is the recommended way of using the class if you always want to work with the same account.
 
 ### Retrieve an account's pastes
 
-Retrieving an account's pastes is easy:
+Retrieving pastes belonging to an account is easy:
 
 ``` php
 require 'Brush.php';
@@ -105,7 +109,7 @@ use \Brush\Accounts\Account;
 use \Brush\Accounts\Developer;
 use \Brush\Exceptions\BrushException;
 
-$account = new Account('<user session key>'); // or credentials
+$account = new Account('<user session key>');
 $developer = new Developer('<developer key>');
 
 try {
@@ -116,11 +120,11 @@ catch (BrushException $e) {
 }
 ```
 
-`Account`'s `getPastes()` method returns an array of `Paste` objects, representing pastes submitted by that account. It takes an optional second argument: the maximum number of pastes to retrieve. This defaults to 50.
+`Account`'s `getPastes()` method returns an array of `Paste` objects, representing pastes submitted by that account. It takes an optional second argument, the maximum number of pastes to retrieve, which defaults to 50.
 
-### Delete a paste
+#### Delete a paste
 
-Once you have a paste object, simply call `delete()` on it (providing a `Developer` instance) to delete it:
+Pastes retrieved in the above way can be removed by calling `delete()` on them:
 
 ``` php
 require 'Brush.php';
@@ -145,7 +149,7 @@ catch (BrushException $e) {
 }
 ```
 
-N.B. Only pastes retrieved from an account can be deleted. If you attempt to delete a trending paste, Brush will throw a `ValidationException`.
+N.B. For authentication reasons, only pastes retrieved from an account can be deleted. If you attempt to delete a paste obtained via other means (e.g. a trending paste), Brush will detect this and throw a `ValidationException`, as Pastebin would simply reject the request.
 
 ### Retrieve trending pastes
 
