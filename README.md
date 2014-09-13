@@ -24,13 +24,20 @@ require 'Brush.php';
 
 use \Brush\Pastes\Draft;
 use \Brush\Accounts\Developer;
+use \Brush\Exceptions\BrushException;
 
 $draft = new Draft();
 $draft->setContent('Some random content');
 
 $developer = new Developer('<developer key>');
-$paste = $draft->paste($developer);
-echo $paste->getUrl(); // e.g. http://pastebin.com/JYvbS0fC
+
+try {
+	$paste = $draft->paste($developer);
+	echo $paste->getUrl(); // e.g. http://pastebin.com/JYvbS0fC
+}
+catch (BrushException $e) {
+	echo $e->getMessage();
+}
 ```
 
 There are several things to note:
@@ -60,6 +67,7 @@ use \Brush\Accounts\Developer;
 use \Brush\Accounts\Account;
 use \Brush\Accounts\Credentials;
 use \Brush\Pastes\Draft;
+use \Brush\Exceptions\BrushException;
 
 $account = new Account(new Credentials('<username>', '<password>'));
 
@@ -68,7 +76,13 @@ $draft->setContent('Paste content');
 $draft->setOwner($account);
 
 $developer = new Developer('<developer key>');
-$paste = $draft->paste($developer);
+
+try {
+	$paste = $draft->paste($developer);
+}
+catch (BrushException $e) {
+	echo $e->getMessage();
+}
 ```
 
 The `Account` class represents a Pastebin account. It can be created from a set of credentials as above, or directly from a user session key. Once you have create an account object, you simply need to call `setOwner()` on the draft passing it as the only argument. When the draft is pasted, Brush will make sure the draft is associated with the specified account.
@@ -82,10 +96,17 @@ require 'Brush.php';
 
 use \Brush\Accounts\Account;
 use \Brush\Accounts\Developer;
+use \Brush\Exceptions\BrushException;
 
 $account = new Account('<user session key>'); // or credentials
 $developer = new Developer('<developer key>');
-$pastes = $account->getPastes($developer);
+
+try {
+	$pastes = $account->getPastes($developer);
+}
+catch (BrushException $e) {
+	echo $e->getMessage();
+}
 ```
 
 `Account`'s `getPastes()` method returns an array of `Paste` objects, representing pastes submitted by that account. It takes an optional second argument: the maximum number of pastes to retrieve. This defaults to 50.
@@ -99,14 +120,21 @@ require 'Brush.php';
 
 use \Brush\Accounts\Account;
 use \Brush\Accounts\Developer;
+use \Brush\Exceptions\BrushException;
 
 $account = new Account('<user session key>');
 $developer = new Developer('<developer key>');
-$pastes = $account->getPastes($developer, 10);
 
-// delete the first 10 account pastes
-foreach ($pastes as $paste) {
-	$paste->delete($developer);
+try {
+	$pastes = $account->getPastes($developer, 10);
+
+	// delete the first 10 account pastes
+	foreach ($pastes as $paste) {
+		$paste->delete($developer);
+	}
+}
+catch (BrushException $e) {
+	echo $e->getMessage();
 }
 ```
 
@@ -119,9 +147,16 @@ require 'Brush.php';
 
 use \Brush\Accounts\Developer;
 use \Brush\Pastes\Trending;
+use \Brush\Exceptions\BrushException;
 
 $developer = new Developer('<developer key>');
-$pastes = Trending::getPastes($developer);
+
+try {
+	$pastes = Trending::getPastes($developer);
+}
+catch (BrushException $e) {
+	echo $e->getMessage();
+}
 ```
 
 ## Contributing
