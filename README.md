@@ -70,13 +70,13 @@ use \Brush\Pastes\Draft;
 use \Brush\Pastes\Options\Visibility;
 use \Brush\Exceptions\BrushException;
 
-// an account object represents a Pastebin user account
-$account = new Account(new Credentials('<username>', '<password>'));
-
 // this time, create a draft directly from a file
 $draft = Draft::fromFile('passwords.txt');
 
-// link the draft to the account we specified above
+// an Account object represents a Pastebin user account
+$account = new Account(new Credentials('<username>', '<password>'));
+
+// link the draft to the account
 $draft->setOwner($account);
 
 // specify that we don't want this paste to be publicly accessible
@@ -96,8 +96,8 @@ catch (BrushException $e) {
 
 The `Account` class represents a Pastebin account. At the lowest level, it manages a user session key, which has to be provided when doing operations affecting a particular account. An instance can be created in two ways:
 
- 1. Via a set of credentials, as above. Brush will make an HTTP request to Pastebin when a user key is first needed, and cache it for the rest of execution.
- 2. Directly by passing a session key string as the only argument to `Account`'s constructor. This saves a request, and is the recommended way of using the class if you always want to work with the same account.
+ 1. Via a set of credentials, as above. Brush will make an HTTP request to Pastebin to retrieve a new user key when one is first needed, and will cache it for the rest of execution.
+ 2. Directly by passing a session key string as the only argument to `Account`'s constructor. This saves a request, and is the recommended way if you always want to work with the same account.
 
 ### Retrieve an account's pastes
 
@@ -151,7 +151,7 @@ catch (BrushException $e) {
 }
 ```
 
-N.B. For authentication reasons, only pastes retrieved from an account can be deleted. If you attempt to delete a paste obtained via other means (e.g. a trending paste), Brush will detect this and throw a `ValidationException`, as Pastebin would simply reject the request.
+N.B. For reasons of authentication, only pastes retrieved from an account can be deleted. If you attempt to delete a paste obtained via other means (e.g. a trending paste), Brush will detect this and throw a `ValidationException`, as Pastebin would simply reject the request. Brush will always try to warn you of errors before bothering Pastebin.
 
 ### Retrieve trending pastes
 
