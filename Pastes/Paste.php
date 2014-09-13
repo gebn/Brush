@@ -283,6 +283,10 @@ namespace Brush\Pastes {
 			$this->setSize(strlen($draft->getContent()));
 			$this->setFormat($draft->getFormat());
 			$this->setVisibility($draft->getVisibility());
+
+			if ($draft->hasOwner()) {
+				$this->setOwner($draft->getOwner());
+			}
 		}
 
 		/**
