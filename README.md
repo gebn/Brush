@@ -43,18 +43,10 @@ catch (BrushException $e) {
 There are several things to note:
 
  - You only ever need to require `Brush.php`; Brush has an autoloader, which will take care of other includes for you.
- - The `Draft` class represents a paste not yet submitted to Pastebin. It has setters allowing you to configure every possible option for your new paste, including expiry, format and visibility. For an example of how to do this, see the *Draft options* section below.
+ - The `Draft` class represents a paste not yet submitted to Pastebin. It has setters allowing you to configure every possible option for your new paste, including expiry, format and visibility.
+ - Brush validates drafts before attempting to send them to Pastebin. If an error is detected (e.g. no content set), then a `ValidationException` will be thrown when attempting to `paste()` the draft.
  - The `Developer` class represents a developer account. A developer instance needs to be provided for all interaction with the Pastebin API.
  - Once a draft is `paste()`d, Brush will return a `Paste` object. This contains all information about the paste, including as its key, URL and expiry date.
-
-#### Draft options
-
-Below is an example of all possible options that can be set on a `Draft`. The only exception is `setOwner()`, which we'll cover in *Create a private paste* below.
-
-``` php
-```
-
-Brush validates drafts before attempting to send them to Pastebin. If an error is detected (e.g. no content set), then a `ValidationException` will be thrown when attempting to `paste()` the draft.
 
 ### Create a private paste
 
