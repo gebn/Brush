@@ -117,7 +117,7 @@ namespace Brush\Pastes {
 		 * Retrieve the account that owns this paste.
 		 * @return \Brush\Accounts\Account The account that owns this paste.
 		 */
-		protected final function getOwner() {
+		public final function getOwner() {
 			return $this->owner;
 		}
 
@@ -126,7 +126,7 @@ namespace Brush\Pastes {
 		 * If it doesn't, it cannot have private visibility.
 		 * @return boolean True if this paste has an assigned owner; false otherwise.
 		 */
-		protected final function hasOwner() {
+		public final function hasOwner() {
 			return $this->getOwner() !== null;
 		}
 
