@@ -54,7 +54,7 @@ namespace Brush\Accounts {
 		 * Null if unknown.
 		 * @var string
 		 */
-		private $website;
+		private $websiteUrl;
 
 		/**
 		 * Where this user is from.
@@ -133,16 +133,16 @@ namespace Brush\Accounts {
 		 * Retrieve the address of this user's website.
 		 * @return string The address of this user's website.
 		 */
-		public final function getWebsite() {
-			return $this->website;
+		public final function getWebsiteUrl() {
+			return $this->websiteUrl;
 		}
 
 		/**
 		 * Set the address of this user's website.
-		 * @param string $website The new address of this user's website.
+		 * @param string $websiteUrl The new address of this user's website.
 		 */
-		private final function setWebsite($website) {
-			$this->website = $website;
+		private final function setWebsiteUrl($websiteUrl) {
+			$this->websiteUrl = $websiteUrl;
 		}
 
 		/**
@@ -238,7 +238,7 @@ namespace Brush\Accounts {
 			$this->setUsername($user->getElementsByTagName('user_name')->item(0)->nodeValue);
 			$this->setAvatarUrl($user->getElementsByTagName('user_avatar_url')->item(0)->nodeValue);
 			$this->setEmail($user->getElementsByTagName('user_email')->item(0)->nodeValue);
-			$this->setWebsite($user->getElementsByTagName('user_website')->item(0)->nodeValue);
+			$this->setWebsiteUrl($user->getElementsByTagName('user_website')->item(0)->nodeValue);
 			$location = $user->getElementsByTagName('user_location')->item(0)->nodeValue;
 			$this->setLocation($location === '' ? null : $location);
 			$this->setType($user->getElementsByTagName('user_account_type')->item(0)->nodeValue);
