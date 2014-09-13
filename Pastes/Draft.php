@@ -2,6 +2,7 @@
 
 namespace Brush\Pastes {
 
+	use \Brush\Accounts\Account;
 	use \Brush\Accounts\Developer;
 	use \Brush\Accounts\User;
 	use \Brush\Pastes\Options\Expiry;
@@ -50,15 +51,10 @@ namespace Brush\Pastes {
 
 		/**
 		 * Initialise properties to defaults.
-		 * @param \Brush\Accounts\User $user An optional user to import default settings from.
 		 */
-		public function __construct(User $user = null) {
+		public function __construct() {
 			parent::__construct();
 			$this->setExpiry(Expiry::EXPIRY_NEVER);
-
-			if ($user !== null) {
-				$user->getDefaults()->applyTo($this);
-			}
 		}
 
 		/**
@@ -100,6 +96,19 @@ namespace Brush\Pastes {
 		protected function addTo(POSTRequest $request, Developer $developer) {
 			parent::addTo($request, $developer);
 			$request->getVariables()->set('api_paste_expire_date', $this->getExpiry());
+		}
+
+		/**
+		 * Create a new draft with an account's default settings, and set them as the owner.
+		 * @param \Brush\Accounts\Account $account The owner's account whose settings to use.
+		 * @param \Brush\Accounts\Developer $developer The developer account to use if settings need to be retrieved.
+		 * @return \Brush\Pastes\Draft The created draft paste.
+		 */
+		public static function fromOwner(Account $account, Developer $developer) {
+			$draft = new Draft();
+			$draft->setOwner($account);
+			User::fromAccount($account, $developer)->getDefaults()->applyTo($draft);
+			return $draft;
 		}
 
 		/**
