@@ -1,10 +1,48 @@
 # Methods
 
-This file documents all public class methods that you may want to use.
+This file documents all public class methods that you may want to use, organised by namespace.
 
 Brush code is heavily documented, so don't be afraid to open up the source files and look at the comments.
 
-## `\Brush\Pastes\Draft`
+## Accounts
+
+### `Credentials`
+
+Method | Description
+--- | ---
+`__construct(username:string, password:string)` | Create a new set of credentials from a username and password pair
+
+### `Account`
+
+Method | Description
+--- | ---
+`__construct(Credentials)` | Create an account from its login credentials
+`__construct(key:string)` | Create an account directly from a user session key
+`getPastes(Developer, limit:int)` | Retrieve the account's pastes, up to `limit`
+
+### `Developer`
+
+Method | Description
+--- | ---
+`__construct(key:string)` | Create a developer directly from an API key
+
+### `User`
+
+A `User` object is returned by a call to `User::fromAccount(Account)`.
+
+Method | Description
+--- | ---
+`getUsername()` | The user's username
+`getAvatarUrl()` | The address of the user's avatar
+`getEmail()` | The user's email address
+`getWebsiteUrl()` | The address of the user's website
+`getLocation()` | The user's location
+`getType()` | The user's account type (`User::TYPE_NORMAL` or `User::TYPE_PRO`)
+`isPro()` | `getType() == User::TYPE_PRO`
+
+## Pastes
+
+### `Draft`
 
 Method | Description
 --- | ---
@@ -17,7 +55,7 @@ Method | Description
 `setOwner(Account)` | Set the account that will own the paste
 `paste(Developer)` | Submit the draft to Pastebin, and retrieve the `Paste` object
 
-## `\Brush\Pastes\Paste`
+### `Paste`
 
 A `Paste` object is returned when listing pastes, and when `paste()`ing a draft.
 
@@ -34,16 +72,8 @@ Method | Description
 `getContent()` | Retrieve the raw paste content
 `delete(Developer)` | Delete the paste
 
-## `\Brush\Pastes\User`
-
-A `User` object is returned by a call to `User::fromAccount(Account)`.
+### `Trending`
 
 Method | Description
 --- | ---
-`getUsername()` | The user's username
-`getAvatarUrl()` | The address of the user's avatar
-`getEmail()` | The user's email address
-`getWebsiteUrl()` | The address of the user's website
-`getLocation()` | The user's location
-`getType()` | The user's account type (`User::TYPE_NORMAL` or `User::TYPE_PRO`)
-`isPro()` | `getType() == User::TYPE_PRO`
+`getPastes(Developer)` | Get the 18 currently trending pastes
