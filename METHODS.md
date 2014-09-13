@@ -23,7 +23,7 @@ A `Paste` object is returned when listing pastes, and when `paste()`ing a draft.
 
 Method | Description
 --- | ---
-`getKey()` | The unique past key
+`getKey()` | The unique paste key
 `getUrl()` | The paste's URL
 `getDate()` | When the paste was submitted, as a UNIX timestamp
 `getSize()` | The size of the paste in bytes
