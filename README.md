@@ -88,6 +88,9 @@ $developer = new Developer('<developer key>');
 try {
 	// submit the draft and retrieve the final paste in the same way as above
 	$paste = $draft->paste($developer);
+
+	// print out the key of the newly created paste
+	echo $paste->getKey();
 }
 catch (BrushException $e) {
 	echo $e->getMessage();
@@ -114,7 +117,13 @@ $account = new Account('<user session key>');
 $developer = new Developer('<developer key>');
 
 try {
+	// retrieve the first 50 (see below) account pastes
 	$pastes = $account->getPastes($developer);
+
+	// print out the name of each paste followed by a line feed
+	foreach ($pastes as $paste) {
+		echo $paste->getTitle(), "\n";
+	}
 }
 catch (BrushException $e) {
 	echo $e->getMessage();
@@ -144,6 +153,7 @@ try {
 	// delete each one
 	foreach ($pastes as $paste) {
 		$paste->delete($developer);
+		echo 'Deleted ', $paste->getKey(), "\n";
 	}
 }
 catch (BrushException $e) {
@@ -167,6 +177,11 @@ $developer = new Developer('<developer key>');
 try {
 	// retrieve an array of the top 18 currently trending pastes
 	$pastes = Trending::getPastes($developer);
+
+	// print out the titles and hit counts of each one
+	foreach ($pastes as $paste) {
+		printf("%-70s%d\n", $paste->getTitle(), $paste->getHits());
+	}
 }
 catch (BrushException $e) {
 	echo $e->getMessage();
