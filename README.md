@@ -26,16 +26,21 @@ use \Brush\Pastes\Draft;
 use \Brush\Accounts\Developer;
 use \Brush\Exceptions\BrushException;
 
-$draft = new Draft();
-$draft->setContent('Some random content');
+$draft = new Draft(); // drafts represent unsent pastes
+$draft->setContent('Some random content'); // set the paste content
 
+// a developer account is required for all interactions with the API
 $developer = new Developer('<developer key>');
 
 try {
+	// send the draft to Pastebin; turn it into a full blown paste
 	$paste = $draft->paste($developer);
+
+	// print out the URL of the new paste
 	echo $paste->getUrl(); // e.g. http://pastebin.com/JYvbS0fC
 }
 catch (BrushException $e) {
+	// some sort of error occurred; check the message for the cause
 	echo $e->getMessage();
 }
 ```
@@ -62,14 +67,20 @@ use \Brush\Accounts\Credentials;
 use \Brush\Pastes\Draft;
 use \Brush\Exceptions\BrushException;
 
+// an account object represents a Pastebin user account
 $account = new Account(new Credentials('<username>', '<password>'));
 
+// this time, create a draft directly from a file
 $draft = Draft::fromFile('passwords.txt');
+
+// link the draft to the account we specified above
 $draft->setOwner($account);
 
+// the Developer class manages a developer key and the signing of requests with it
 $developer = new Developer('<developer key>');
 
 try {
+	// submit the draft and retrieve the final paste in the same way as above
 	$paste = $draft->paste($developer);
 }
 catch (BrushException $e) {
@@ -144,6 +155,7 @@ use \Brush\Exceptions\BrushException;
 $developer = new Developer('<developer key>');
 
 try {
+	// retrieve an array of the top 18 currently trending pastes
 	$pastes = Trending::getPastes($developer);
 }
 catch (BrushException $e) {
