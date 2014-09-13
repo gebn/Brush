@@ -17,7 +17,7 @@ Method | Description
 Method | Description
 --- | ---
 `__construct(Credentials)` | Create an account from its login credentials
-`__construct(key:string)` | Create an account directly from a user session key
+`__construct(key:string)` | Create an account directly from a user session key (more efficient than passing credentials)
 `getPastes(Developer, limit:int)` | Retrieve the account's pastes, up to `limit`
 
 ### `Developer`
