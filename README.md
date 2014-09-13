@@ -29,11 +29,12 @@ use \Brush\Exceptions\BrushException;
 $draft = new Draft(); // drafts represent unsent pastes
 $draft->setContent('Some random content'); // set the paste content
 
-// a developer account is required for all interactions with the API
+// the Developer class encapsulates a developer API key; an instance
+// needs to be provided whenever Brush might interact with Pastebin
 $developer = new Developer('<developer key>');
 
 try {
-	// send the draft to Pastebin; turn it into a full blown paste
+	// send the draft to Pastebin; turn it into a full blown Paste object
 	$paste = $draft->paste($developer);
 
 	// print out the URL of the new paste
@@ -78,10 +79,10 @@ $draft = Draft::fromFile('passwords.txt');
 // link the draft to the account we specified above
 $draft->setOwner($account);
 
-// specify that we don't want this paste to be visible outside the account
+// specify that we don't want this paste to be publicly accessible
 $draft->setVisibility(Visibility::VISIBILITY_PRIVATE);
 
-// the Developer class manages a developer key and the signing of requests with it
+// the Developer class manages a developer key
 $developer = new Developer('<developer key>');
 
 try {
@@ -137,9 +138,10 @@ $account = new Account('<user session key>');
 $developer = new Developer('<developer key>');
 
 try {
+	// retrieve up to 10 account pastes
 	$pastes = $account->getPastes($developer, 10);
 
-	// delete the first 10 account pastes
+	// delete each one
 	foreach ($pastes as $paste) {
 		$paste->delete($developer);
 	}
