@@ -20,7 +20,7 @@ Brush is a complete object-oriented PHP wrapper for the Pastebin API.
 Below is a minimal example showing how to submit a new paste:
 
 ``` php
-require 'Brush.php';
+require 'Brush/Brush.php';
 
 use \Brush\Pastes\Draft;
 use \Brush\Accounts\Developer;
@@ -60,7 +60,7 @@ There are several things to note:
 Private pastes must have an account associated with them, but Brush makes this easy to set up:
 
 ``` php
-require '../Brush.php';
+require 'Brush/Brush.php';
 
 use \Brush\Accounts\Developer;
 use \Brush\Accounts\Account;
@@ -103,7 +103,7 @@ The `Account` class represents a Pastebin account. At the lowest level, it manag
 Retrieving pastes belonging to an account is easy:
 
 ``` php
-require 'Brush.php';
+require 'Brush/Brush.php';
 
 use \Brush\Accounts\Account;
 use \Brush\Accounts\Developer;
@@ -127,7 +127,7 @@ catch (BrushException $e) {
 Pastes retrieved in the above way can be removed by calling `delete()` on them:
 
 ``` php
-require 'Brush.php';
+require 'Brush/Brush.php';
 
 use \Brush\Accounts\Account;
 use \Brush\Accounts\Developer;
@@ -154,7 +154,7 @@ N.B. For authentication reasons, only pastes retrieved from an account can be de
 ### Retrieve trending pastes
 
 ``` php
-require 'Brush.php';
+require 'Brush/Brush.php';
 
 use \Brush\Accounts\Developer;
 use \Brush\Pastes\Trending;
