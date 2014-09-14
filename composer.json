@@ -1,0 +1,22 @@
+{
+	"name": "gebn/brush",
+	"description": "Brush is a complete object-oriented PHP wrapper for the Pastebin API.",
+	"type": "library",
+	"keywords": ["pastebin", "api", "wrapper", "text"],
+	"homepage": "https://github.com/gebn/Brush",
+	"license": "MIT",
+	"authors": [
+		{
+			"name": "George Brighton",
+			"homepage": "http://gebn.co.uk/"
+		}
+	],
+	"support": {
+		"issues": "https://github.com/gebn/Brush/issues",
+		"source": "https://github.com/gebn/Brush/tree/master"
+	},
+	"require": {
+		"php": ">=5.3.0",
+		"ext-curl": "*"
+	}
+}
