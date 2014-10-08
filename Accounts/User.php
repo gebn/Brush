@@ -238,9 +238,13 @@ namespace Brush\Accounts {
 			$this->setUsername($user->getElementsByTagName('user_name')->item(0)->nodeValue);
 			$this->setAvatarUrl($user->getElementsByTagName('user_avatar_url')->item(0)->nodeValue);
 			$this->setEmail($user->getElementsByTagName('user_email')->item(0)->nodeValue);
-			$this->setWebsiteUrl($user->getElementsByTagName('user_website')->item(0)->nodeValue);
+
+			$website = $user->getElementsByTagName('user_website')->item(0)->nodeValue;
+			$this->setWebsiteUrl($website === '' ? null : $website);
+
 			$location = $user->getElementsByTagName('user_location')->item(0)->nodeValue;
 			$this->setLocation($location === '' ? null : $location);
+
 			$this->setType($user->getElementsByTagName('user_account_type')->item(0)->nodeValue);
 			$this->setDefaults(Defaults::fromXml($user));
 		}
