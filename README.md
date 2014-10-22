@@ -104,6 +104,8 @@ The `Account` class represents a Pastebin account. At the lowest level, it manag
 
 In the above example, instead of manually writing a draft, we asked Brush to automatically create one from a local file. Brush will set the draft title to the name of the file, the content as the file content, and attempt to recognise the format from the file's extension. The mappings it uses to do this are in `Configuration/extensions.ini`. This is designed to be edited by you, so feel free to add lines according to your requirements. If you add a large number of maps, please consider contributing them in a pull request so that others may benefit!
 
+You can also create a draft paste inheriting an account's default settings using the `fromOwner(Account, Developer)` method. This will retrieve the defaults for the supplied account, apply them to a new draft, and set the account as the owner.
+
 ### Retrieve an account's pastes
 
 Retrieving pastes belonging to an account is easy:
