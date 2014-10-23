@@ -20,7 +20,7 @@ namespace Brush\Configuration {
 		 * @return array The parsed contents of the file.
 		 */
 		public static function get($file) {
-			if(!isset(self::$content[$file])) {
+			if (!isset(self::$content[$file])) {
 				// load the file into the cache
 				self::$content[$file] = parse_ini_file($file);
 			}

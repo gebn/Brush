@@ -41,7 +41,7 @@ namespace Brush {
 			static $loaded = false;
 
 			// we only want to initialise once
-			if(!$loaded) {
+			if (!$loaded) {
 				self::initialise();
 				$loaded = true;
 			}
