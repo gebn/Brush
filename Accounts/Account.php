@@ -161,16 +161,16 @@ namespace Brush\Accounts {
 		}
 
 		/**
-		 * Retrieve pastes created by this account.
+		 * Retrieve pastes created by this account in descending order of date created.
 		 * @param \Brush\Accounts\Developer $developer The developer account to use for the request.
-		 * @param int $number The maximum number of pastes to retrieve. 1 <= $number <= 1000. Defaults to 50.
+		 * @param int $limit The maximum number of pastes to retrieve. 1 <= $number <= 1000. Defaults to 50.
 		 * @throws \Brush\Exceptions\ArgumentException If the number of pastes is outside the allowed range.
 		 * @return array[\Brush\Pastes\Paste] This account's pastes, up to the limit.
 		 */
-		public function getPastes(Developer $developer, $number = 50) {
+		public function getPastes(Developer $developer, $limit = 50) {
 
 			// check 1 <= $number <= 1000
-			if ($number < 1 || $number > 1000) {
+			if ($limit < 1 || $limit > 1000) {
 				throw new ArgumentException('The number of pastes must be in the range 1 to 1000 inclusive.');
 			}
 
@@ -179,7 +179,7 @@ namespace Brush\Accounts {
 
 			$request = $pastebin->getRequest();
 			$this->sign($request, $developer);
-			$request->getVariables()->set('api_results_limit', $number);
+			$request->getVariables()->set('api_results_limit', $limit);
 
 			return Paste::parsePastes($pastebin->send(), $this);
 		}
