@@ -54,6 +54,7 @@ There are several things to note:
  - When `paste()` is called on a draft, Brush checks for basic errors before attempting to send the draft to Pastebin. If an error is detected (e.g. no content set), a `ValidationException` will be thrown.
  - All exceptions thrown by Brush extend `BrushException`. This allows you to easily handle every single possible error in a single `catch` clause, or use multiple clauses for more fine-grained handling.
  - Once a draft is `paste()`d, Brush automatically creates and return a `Paste` object without any further interaction with the Pastebin API. This object contains all information about the paste, including its key, URL and expiry date.
+ - A `Draft`'s `paste()` method can be safely called multiple times, changing the draft between invocations if required.
  - For a complete method reference, see [METHODS.md](METHODS.md).
 
 ### Create a private paste
