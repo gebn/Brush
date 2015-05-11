@@ -165,7 +165,7 @@ namespace Brush\Accounts {
 		 * @param \Brush\Accounts\Developer $developer The developer account to use for the request.
 		 * @param int $limit The maximum number of pastes to retrieve. 1 <= $number <= 1000. Defaults to 50.
 		 * @throws \Brush\Exceptions\ArgumentException If the number of pastes is outside the allowed range.
-		 * @return array[\Brush\Pastes\Paste] This account's pastes, up to the limit.
+		 * @return \Brush\Pastes\Paste[] This account's pastes, up to the limit.
 		 */
 		public function getPastes(Developer $developer, $limit = 50) {
 

@@ -20,7 +20,7 @@ namespace Brush\Pastes {
 		/**
 		 * Get the 18 currently trending pastes.
 		 * @param \Brush\Accounts\Developer $developer The developer account to use for the request.
-		 * @return array[\Brush\Pastes\Paste] Trending pastes.
+		 * @return \Brush\Pastes\Paste[] Trending pastes.
 		 */
 		public static function getPastes(Developer $developer) {
 			$pastebin = new ApiRequest($developer, self::ENDPOINT);

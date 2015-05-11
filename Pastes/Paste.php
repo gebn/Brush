@@ -227,7 +227,7 @@ namespace Brush\Pastes {
 		 * Parse a successful paste listing response.
 		 * @param string $response The response to parse.
 		 * @param \Brush\Accounts\Account $owner The optional owner of these pastes.
-		 * @return array[\Brush\Pastes\Paste] The parsed pastes.
+		 * @return \Brush\Pastes\Paste[] The parsed pastes.
 		 */
 		public static function parsePastes($response, Account $owner = null) {
 			if ($response == 'No pastes found.') {
