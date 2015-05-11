@@ -49,7 +49,7 @@ namespace Brush\Accounts {
 
 		/**
 		 * Retrieve the visibility of new pastes.
-		 * @return in Tthe visibility of new pastes.
+		 * @return int The visibility of new pastes.
 		 */
 		private final function getVisibility() {
 			return $this->visibility;

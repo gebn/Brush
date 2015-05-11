@@ -218,7 +218,7 @@ namespace Brush\Accounts {
 		}
 
 		/**
-		 * This class should never be publically instantiated.
+		 * This class should never be publicly instantiated.
 		 */
 		private function __construct() {}
 

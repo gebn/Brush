@@ -9,14 +9,14 @@ namespace Brush\Pastes\Options {
 	class Visibility {
 
 		/**
-		 * A publically accessible paste.
+		 * A publicly accessible paste.
 		 * This is the default for new pastes.
 		 * @var int
 		 */
 		const VISIBILITY_PUBLIC = 0;
 
 		/**
-		 * A paste that is publically visible, but doesn't appear in search results.
+		 * A paste that is publicly visible, but doesn't appear in search results.
 		 * @var int
 		 */
 		const VISIBILITY_UNLISTED = 1;
