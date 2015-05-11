@@ -1,4 +1,4 @@
-# Brush
+# Brush [![License](https://img.shields.io/badge/license-MIT-blue.svg?style=flat)](LICENSE) [![Stars](https://img.shields.io/github/stars/gebn/brush.svg?style=flat)](https://github.com/gebn/Brush/stargazers) [![Forks](https://img.shields.io/github/forks/gebn/brush.svg?style=flat)](https://github.com/gebn/Brush/network/members) [![Issues](https://img.shields.io/github/issues/gebn/brush.svg?style=flat)](https://github.com/gebn/Brush/issues)
 
 Brush is a complete object-oriented PHP wrapper for the Pastebin API.
 
