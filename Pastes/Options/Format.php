@@ -92,7 +92,7 @@ namespace Brush\Pastes\Options {
 		/**
 		 * Retrieve a format instance from its code.
 		 * @param string $code The code to get the corresponding full format of.
-		 * @return \Brush\Pastes\Format The created format.
+		 * @return \Brush\Pastes\Options\Format The created format.
 		 * @throws \Brush\Exceptions\BrushException If the code does not match a supported format.
 		 */
 		public static function fromCode($code) {
@@ -106,7 +106,7 @@ namespace Brush\Pastes\Options {
 		/**
 		 * Retrieve a format by a file extension.
 		 * @param string $extension The file extension to search for. No leading dot.
-		 * @return \Brush\Pastes\Format The created format.
+		 * @return \Brush\Pastes\Options\Format The created format.
 		 */
 		public static function fromExtension($extension) {
 			$formats = Loader::get(self::EXTENSIONS_INI);
@@ -123,7 +123,7 @@ namespace Brush\Pastes\Options {
 		/**
 		 * Retrieve a format from a paste's XML.
 		 * @param \DOMElement $paste The `<paste>` element to parse.
-		 * @return \Brush\Pastes\Format The created format.
+		 * @return \Brush\Pastes\Options\Format The created format.
 		 */
 		public static function fromXml(DOMElement $paste) {
 			return self::fromCode($paste->getElementsByTagName('paste_format_short')->item(0)->nodeValue);
