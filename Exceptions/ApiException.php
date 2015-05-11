@@ -2,8 +2,6 @@
 
 namespace Brush\Exceptions {
 
-	use \Brush\Exceptions\BrushException;
-
 	/**
 	 * Represents an error returned to us by Pastebin's API.
 	 * @author George Brighton

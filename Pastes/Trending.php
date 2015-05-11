@@ -2,7 +2,6 @@
 
 namespace Brush\Pastes {
 
-	use \Brush\Pastes\Paste;
 	use \Brush\Accounts\Developer;
 	use \Brush\Utilities\ApiRequest;
 
