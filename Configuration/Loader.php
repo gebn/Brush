@@ -10,14 +10,14 @@ namespace Brush\Configuration {
 
 		/**
 		 * Cache for loaded and parsed files, indexed by file name.
-		 * @var array[string]
+		 * @var string[string[]]
 		 */
 		private static $content = array();
 
 		/**
 		 * Get the parsed contents of a configuration file.
 		 * @param string $file The path of the file to load.
-		 * @return array The parsed contents of the file.
+		 * @return string[] The parsed contents of the file.
 		 */
 		public static function get($file) {
 			if (!isset(self::$content[$file])) {
