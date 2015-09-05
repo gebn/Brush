@@ -51,18 +51,8 @@ namespace Brush {
 		 * Carries out everything needed to get Brush up and running.
 		 */
 		private static function initialise() {
-			self::checkRequirements();
 			self::registerAutoloader();
-		}
-
-		/**
-		 * Ensures this installation of PHP meets Brush's minimum requirements.
-		 * @throws \Brush\Exceptions\DependencyException If any requirement is not met.
-		 */
-		private static function checkRequirements() {
-			if (version_compare(PHP_VERSION, '5.3.0', '<')) {
-				throw new DependencyException('Brush requires PHP 5.3.0 or later.');
-			}
+			self::checkRequirements();
 		}
 
 		/**
@@ -74,6 +64,20 @@ namespace Brush {
 					require str_replace('\\', DIRECTORY_SEPARATOR, substr($qualified, 6)) . '.php';
 				}
 			}, true);
+		}
+
+		/**
+		 * Ensures this installation of PHP meets Brush's minimum requirements.
+		 * @throws \Brush\Exceptions\DependencyException If any requirement is not met.
+		 */
+		private static function checkRequirements() {
+			if (version_compare(PHP_VERSION, '5.3.0', '<')) {
+				throw new DependencyException('Brush requires PHP 5.3.0 or later.');
+			}
+
+			if (!extension_loaded('mbstring')) {
+				throw new DependencyException('The Multibyte String (mbstring) extension is not installed.');
+			}
 		}
 	}
 }
