@@ -74,10 +74,6 @@ namespace Brush {
 			if (version_compare(PHP_VERSION, '5.3.0', '<')) {
 				throw new DependencyException('Brush requires PHP 5.3.0 or later.');
 			}
-
-			if (!extension_loaded('mbstring')) {
-				throw new DependencyException('The Multibyte String (mbstring) extension is not installed.');
-			}
 		}
 	}
 }

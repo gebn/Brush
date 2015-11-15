@@ -12,7 +12,7 @@ Brush is a complete object-oriented PHP wrapper for the Pastebin API.
 ## Dependencies
 
  - PHP 5.3.0+
- - cURL and mbstring extensions
+ - cURL
 
 ## Getting Started
 
