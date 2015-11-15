@@ -14,13 +14,13 @@ $draft->setContent('Some random content'); // set the paste content
 $developer = new Developer('<developer key>');
 
 try {
-    // send the draft to Pastebin; turn it into a full blown Paste object
-    $paste = $draft->paste($developer);
+	// send the draft to Pastebin; turn it into a full blown Paste object
+	$paste = $draft->paste($developer);
 
-    // print out the URL of the new paste
-    echo $paste->getUrl(), PHP_EOL; // e.g. http://pastebin.com/JYvbS0fC
+	// print out the URL of the new paste
+	echo $paste->getUrl(), PHP_EOL; // e.g. http://pastebin.com/JYvbS0fC
 }
 catch (BrushException $e) {
-    // some sort of error occurred; check the message for the cause
-    echo $e->getMessage(), PHP_EOL;
+	// some sort of error occurred; check the message for the cause
+	echo $e->getMessage(), PHP_EOL;
 }

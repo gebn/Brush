@@ -25,12 +25,12 @@ $draft->setVisibility(Visibility::VISIBILITY_PRIVATE);
 $developer = new Developer('<developer key>');
 
 try {
-    // submit the draft and retrieve the final paste in the same way as above
-    $paste = $draft->paste($developer);
+	// submit the draft and retrieve the final paste in the same way as above
+	$paste = $draft->paste($developer);
 
-    // print out the key of the newly created paste
-    echo $paste->getKey(), PHP_EOL;
+	// print out the key of the newly created paste
+	echo $paste->getKey(), PHP_EOL;
 }
 catch (BrushException $e) {
-    echo $e->getMessage(), PHP_EOL;
+	echo $e->getMessage(), PHP_EOL;
 }

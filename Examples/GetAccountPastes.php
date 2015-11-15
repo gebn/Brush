@@ -10,14 +10,14 @@ $account = new Account('<user session key>');
 $developer = new Developer('<developer key>');
 
 try {
-    // retrieve the first 50 (see below) account pastes
-    $pastes = $account->getPastes($developer);
+	// retrieve the first 50 (see below) account pastes
+	$pastes = $account->getPastes($developer);
 
-    // print out the name of each paste followed by a line feed
-    foreach ($pastes as $paste) {
-        echo $paste->getTitle(), PHP_EOL;
-    }
+	// print out the name of each paste followed by a line feed
+	foreach ($pastes as $paste) {
+		echo $paste->getTitle(), PHP_EOL;
+	}
 }
 catch (BrushException $e) {
-    echo $e->getMessage(), PHP_EOL;
+	echo $e->getMessage(), PHP_EOL;
 }
