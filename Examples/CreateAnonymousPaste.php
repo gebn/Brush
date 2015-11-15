@@ -24,4 +24,3 @@ catch (BrushException $e) {
     // some sort of error occurred; check the message for the cause
     echo $e->getMessage(), PHP_EOL;
 }
-

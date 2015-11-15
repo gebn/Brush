@@ -20,4 +20,3 @@ try {
 catch (BrushException $e) {
     echo $e->getMessage(), PHP_EOL;
 }
-
