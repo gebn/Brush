@@ -285,7 +285,7 @@ namespace Brush\Pastes {
 		private function import(Draft $draft) {
 			$this->setTitle($draft->getTitle());
 			$this->setContent($draft->getContent());
-			$this->setSize(mb_strlen($draft->getContent(), 'UTF-8'));
+			$this->setSize(strlen($draft->getContent()));
 			$this->setFormat($draft->getFormat());
 			$this->setVisibility($draft->getVisibility());
 
