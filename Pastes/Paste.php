@@ -5,6 +5,7 @@ namespace Brush\Pastes {
 	use \Brush\Accounts\Account;
 	use \Brush\Accounts\Developer;
 	use \Brush\Pastes\Options\Expiry;
+	use \Brush\Pastes\Options\Visibility;
 	use \Brush\Utilities\ApiRequest;
 	use \Brush\Exceptions\ArgumentException;
 	use \Brush\Exceptions\RequestException;
@@ -184,9 +185,13 @@ namespace Brush\Pastes {
 		/**
 		 * Retrieve the content of this paste.
 		 * @return string The content of this paste.
+		 * @throws \Brush\Exceptions\ValidationException If this paste is private.
 		 */
 		public function getContent() {
 			if (parent::getContent() === null) {
+				if ($this->getVisibility() === Visibility::VISIBILITY_PRIVATE) {
+					throw new ValidationException('The Pastebin API does not support retrieving the contents of private pastes.');
+				}
 				$this->loadContent();
 			}
 			return parent::getContent();
