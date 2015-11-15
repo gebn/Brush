@@ -1,6 +1,6 @@
 <?php
 
-require '../Brush.php';
+require dirname(__FILE__) . '/../Brush.php';
 
 use \Brush\Accounts\Developer;
 use \Brush\Pastes\Trending;
@@ -18,6 +18,6 @@ try {
     }
 }
 catch (BrushException $e) {
-    echo $e->getMessage();
+    echo $e->getMessage(), PHP_EOL;
 }
 

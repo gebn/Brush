@@ -1,6 +1,6 @@
 <?php
 
-require '../Brush.php';
+require dirname(__FILE__) . '/../Brush.php';
 
 use \Brush\Accounts\Account;
 use \Brush\Accounts\Developer;
@@ -15,10 +15,10 @@ try {
 
     // print out the name of each paste followed by a line feed
     foreach ($pastes as $paste) {
-        echo $paste->getTitle(), "\n";
+        echo $paste->getTitle(), PHP_EOL;
     }
 }
 catch (BrushException $e) {
-    echo $e->getMessage();
+    echo $e->getMessage(), PHP_EOL;
 }
 

@@ -1,6 +1,6 @@
 <?php
 
-require '../Brush.php';
+require dirname(__FILE__) . '/../Brush.php';
 
 use \Brush\Pastes\Draft;
 use \Brush\Accounts\Developer;
@@ -18,10 +18,10 @@ try {
     $paste = $draft->paste($developer);
 
     // print out the URL of the new paste
-    echo $paste->getUrl(); // e.g. http://pastebin.com/JYvbS0fC
+    echo $paste->getUrl(), PHP_EOL; // e.g. http://pastebin.com/JYvbS0fC
 }
 catch (BrushException $e) {
     // some sort of error occurred; check the message for the cause
-    echo $e->getMessage();
+    echo $e->getMessage(), PHP_EOL;
 }
 

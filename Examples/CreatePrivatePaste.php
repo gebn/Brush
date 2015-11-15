@@ -1,6 +1,6 @@
 <?php
 
-require '../Brush.php';
+require dirname(__FILE__) . '/../Brush.php';
 
 use \Brush\Accounts\Developer;
 use \Brush\Accounts\Account;
@@ -29,9 +29,8 @@ try {
     $paste = $draft->paste($developer);
 
     // print out the key of the newly created paste
-    echo $paste->getKey();
+    echo $paste->getKey(), PHP_EOL;
 }
 catch (BrushException $e) {
-    echo $e->getMessage();
+    echo $e->getMessage(), PHP_EOL;
 }
-
