@@ -10,8 +10,8 @@ $account = new Account('<user session key>');
 $developer = new Developer('<developer key>');
 
 try {
-	// retrieve the first 50 (see below) account pastes
-	$pastes = $account->getPastes($developer);
+	// retrieve the first 50 account pastes
+	$pastes = $account->getPastes($developer, 50);
 
 	// print out the name of each paste followed by a line feed
 	foreach ($pastes as $paste) {
