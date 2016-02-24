@@ -202,8 +202,7 @@ namespace Brush\Pastes {
 		 * @throws \Brush\Exceptions\RequestException If the request to Pastebin fails.
 		 */
 		private final function loadContent() {
-			$request = new GETRequest('http://pastebin.com/raw.php');
-			$request->getParameters()->set('i', $this->getKey());
+			$request = new GETRequest('http://pastebin.com/raw/' . $this->getKey());
 
 			try {
 				$this->setContent($request->getResponse()->getBody());
