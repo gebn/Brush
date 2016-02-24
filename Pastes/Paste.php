@@ -23,6 +23,12 @@ namespace Brush\Pastes {
 	class Paste extends AbstractPaste {
 
 		/**
+		 * Pastebin's relative endpoint for retrieving the content of private pastes.
+		 * @var string
+		 */
+		const PRIVATE_CONTENTS_ENDPOINT = 'api_raw.php';
+
+		/**
 		 * Pastebin's relative endpoint for deleting pastes.
 		 * @var string
 		 */
@@ -186,32 +192,62 @@ namespace Brush\Pastes {
 
 		/**
 		 * Retrieve the content of this paste.
+		 * @param \Brush\Accounts\Developer $developer If this is a private paste and the content is being accessed
+		 *                                             for the first time, a developer must be passed.
 		 * @return string The content of this paste.
 		 * @throws \Brush\Exceptions\ValidationException If this paste is private.
 		 */
-		public function getContent() {
+		public function getContent(Developer $developer = null) {
 			if (parent::getContent() === null) {
 				if ($this->getVisibility() === Visibility::VISIBILITY_PRIVATE) {
-					throw new ValidationException('The Pastebin API does not support retrieving the contents of private pastes.');
+					if ($developer === null) {
+						throw new ValidationException('A developer instance must be passed the first time the contents '
+							. 'of a private paste are retrieved');
+					}
+					$this->setContent(self::getPrivateContent($developer, $this));
 				}
-				$this->loadContent();
+				else {
+					$this->setContent(self::getPublicContent($this));
+				}
 			}
+
 			return parent::getContent();
 		}
 
 		/**
-		 * Load the content of this paste.
+		 * Retrieve the content of a public or unlisted paste.
+		 * @param \Brush\Pastes\Paste $paste The paste whose content to retrieve.
+		 * @return string The paste content.
 		 * @throws \Brush\Exceptions\RequestException If the request to Pastebin fails.
 		 */
-		private final function loadContent() {
-			$request = new GETRequest('http://pastebin.com/raw/' . $this->getKey());
+		private static final function getPublicContent(Paste $paste) {
+			assert($paste->getVisibility() === Visibility::VISIBILITY_PUBLIC
+				|| $paste->getVisibility() === Visibility::VISIBILITY_UNLISTED);
+
+			$request = new GETRequest('http://pastebin.com/raw/' . $paste->getKey());
 
 			try {
-				$this->setContent($request->getResponse()->getBody());
+				return $request->getResponse()->getBody();
 			}
 			catch (CrackleRequestException $e) {
 				throw new RequestException($request);
 			}
+		}
+
+		/**
+		 * Retrieve the content of a public or unlisted paste.
+		 * @param \Brush\Accounts\Developer $developer The developer account to use for the request.
+		 * @param \Brush\Pastes\Paste $paste The paste whose content to retrieve.
+		 * @return string The paste content.
+		 */
+		private static final function getPrivateContent(Developer $developer, Paste $paste) {
+			assert($paste->getVisibility() === Visibility::VISIBILITY_PRIVATE);
+
+			$pastebin = new ApiRequest($developer, self::PRIVATE_CONTENTS_ENDPOINT);
+			$pastebin->setOption('show_paste');
+			$pastebin->getRequest()->getVariables()->set('api_paste_key', $paste->getKey());
+			$paste->getOwner()->sign($pastebin->getRequest(), $developer);
+			return $pastebin->send();
 		}
 
 		/**
