@@ -180,7 +180,9 @@ namespace Brush\Pastes {
 		/**
 		 * Direct outside initialisation of this class is prohibited.
 		 */
-		protected function __construct() {}
+		protected function __construct() {
+			parent::__construct();
+		}
 
 		/**
 		 * Retrieve the content of this paste.
