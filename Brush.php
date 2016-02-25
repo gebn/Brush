@@ -27,7 +27,7 @@ namespace Brush {
 		 * This version of Brush.
 		 * @var string
 		 */
-		const VERSION = '0.13';
+		const VERSION = '1.0.0';
 
 		/**
 		 * This class should not be instantiated.
