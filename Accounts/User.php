@@ -106,6 +106,14 @@ namespace Brush\Accounts {
 		}
 
 		/**
+		 * Find whether this user has a custom avatar set.
+		 * @return bool True if they do, false if it's the default.
+		 */
+		public final function hasCustomAvatar() {
+			return $this->getAvatarUrl() != 'http://pastebin.com/i/guest.gif';
+		}
+
+		/**
 		 * Set the URL of this user's avatar.
 		 * @param string $avatarUrl The new URL of this user's avatar.
 		 */
