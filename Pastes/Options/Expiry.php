@@ -59,14 +59,35 @@ namespace Brush\Pastes\Options {
 		 * @return int The number of seconds in the future, or 0 if never.
 		 */
 		public static function getOffset($expiry) {
-			if ($expiry == Expiry::EXPIRY_TEN_MINUTES) return 60 * 10;
-			if ($expiry == Expiry::EXPIRY_ONE_HOUR) return 60 * 60;
-			if ($expiry == Expiry::EXPIRY_ONE_DAY) return 60 * 60 * 24;
-			if ($expiry == Expiry::EXPIRY_ONE_WEEK) return 60 * 60 * 24 * 7;
-			if ($expiry == Expiry::EXPIRY_TWO_WEEKS) return 60 * 60 * 24 * 7 * 2;
-			if ($expiry == Expiry::EXPIRY_ONE_MONTH) return 60 * 60 * 24 * 28;
-			if ($expiry == Expiry::EXPIRY_NEVER) return 0;
-			throw new ArgumentException(sprintf('Invalid expiry: \'%s\'', $expiry));
+			switch ($expiry) {
+				case self::EXPIRY_TEN_MINUTES: return 60 * 10;
+				case self::EXPIRY_ONE_HOUR: return 60 * 60;
+				case self::EXPIRY_ONE_DAY: return 60 * 60 * 24;
+				case self::EXPIRY_ONE_WEEK: return 60 * 60 * 24 * 7;
+				case self::EXPIRY_TWO_WEEKS: return 60 * 60 * 24 * 7 * 2;
+				case self::EXPIRY_ONE_MONTH: return 60 * 60 * 24 * 28;
+				case self::EXPIRY_NEVER: return 0;
+				default: throw new ArgumentException(sprintf('Unrecognised expiry: \'%s\'', $expiry));
+			}
+		}
+
+		/**
+		 * Find the meaning of an expiry constant.
+		 * @param $expiry int The constant to translate.
+		 * @return string The meaning of the constant.
+		 * @throws \Brush\Exceptions\ArgumentException If $expiry is unrecognised.
+		 */
+		public static function toString($expiry) {
+			switch ($expiry) {
+				case self::EXPIRY_TEN_MINUTES: return '10 minutes';
+				case self::EXPIRY_ONE_HOUR: return '1 hour';
+				case self::EXPIRY_ONE_DAY: return '1 day';
+				case self::EXPIRY_ONE_WEEK: return '1 week';
+				case self::EXPIRY_TWO_WEEKS: return '2 weeks';
+				case self::EXPIRY_ONE_MONTH: return '1 month';
+				case self::EXPIRY_NEVER: return 'Never';
+				default: throw new ArgumentException(sprintf('Unrecognised expiry: \'%s\'', $expiry));
+			}
 		}
 	}
 }

@@ -289,6 +289,26 @@ namespace Brush\Accounts {
 			self::getCache()->set($key, $user);
 			return $user;
 		}
+
+		/**
+		 * Get a plaintext string representation of this user.
+		 * @return string This user's information and defaults.
+		 */
+		public function __toString() {
+			$user = $this->getUsername() . PHP_EOL . PHP_EOL;
+			$user .= 'Information:' . PHP_EOL;
+			$user .= "\t" . 'Email: ' . $this->getEmail() . PHP_EOL;
+			$user .= "\t" . 'Website: '
+					. ($this->getWebsiteUrl() === null ? 'unknown' : $this->getWebsiteUrl())
+					. PHP_EOL;
+			$user .= "\t" . 'Location: '
+					. ($this->getLocation() === null ? 'unknown' : $this->getLocation())
+					. PHP_EOL;
+			$user .= "\t" . 'Account Type: ' . ($this->isPro() ? 'Pro' : 'Normal') . PHP_EOL;
+			$user .= PHP_EOL;
+			$user .= $this->getDefaults();
+			return $user;
+		}
 	}
 
 	User::initialise();

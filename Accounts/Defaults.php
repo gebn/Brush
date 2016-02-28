@@ -4,6 +4,8 @@ namespace Brush\Accounts {
 
 	use \Brush\Pastes\Draft;
 	use \Brush\Pastes\Options\Format;
+	use \Brush\Pastes\Options\Visibility;
+	use \Brush\Pastes\Options\Expiry;
 
 	use \DOMElement;
 
@@ -107,6 +109,18 @@ namespace Brush\Accounts {
 		public static final function fromXml(DOMElement $element) {
 			$defaults = new Defaults();
 			$defaults->parse($element);
+			return $defaults;
+		}
+
+		/**
+		 * Get a plaintext string representation of these defaults.
+		 * @return string The paste defaults.
+		 */
+		public function __toString() {
+			$defaults = 'Paste Defaults:' . PHP_EOL;
+			$defaults .= "\t" . 'Format: ' . $this->getFormat()->getName() . PHP_EOL;
+			$defaults .= "\t" . 'Visibility: ' . Visibility::toString($this->getVisibility()) . PHP_EOL;
+			$defaults .= "\t" . 'Expiry: ' . Expiry::toString($this->getExpiry());
 			return $defaults;
 		}
 	}
