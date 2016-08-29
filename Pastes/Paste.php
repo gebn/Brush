@@ -65,6 +65,13 @@ namespace Brush\Pastes {
 		private $expires;
 
 		/**
+		 * The account that owns this paste.
+		 * This is required if the visibility of this paste is private.
+		 * @var \Brush\Accounts\Account
+		 */
+		private $owner;
+
+		/**
 		 * Retrieve the unique ID of this paste.
 		 * @return string The unique ID of this paste.
 		 */
@@ -184,6 +191,31 @@ namespace Brush\Pastes {
 		}
 
 		/**
+		 * Retrieve the account that owns this paste.
+		 * @return \Brush\Accounts\Account The account that owns this paste.
+		 */
+		public final function getOwner() {
+			return $this->owner;
+		}
+
+		/**
+		 * Find whether this paste has an owner set.
+		 * If it doesn't, it cannot have private visibility.
+		 * @return boolean True if this paste has an assigned owner; false otherwise.
+		 */
+		public final function hasOwner() {
+			return $this->getOwner() !== null;
+		}
+
+		/**
+		 * Set the account that owns this paste.
+		 * @param \Brush\Accounts\Account $owner The account that owns this paste.
+		 */
+		private final function setOwner(Account $owner) {
+			$this->owner = $owner;
+		}
+
+		/**
 		 * Direct outside initialisation of this class is prohibited.
 		 */
 		protected function __construct() {
@@ -300,9 +332,10 @@ namespace Brush\Pastes {
 		 * Create a paste instance from a key and draft.
 		 * @param string $url The URL of the paste.
 		 * @param \Brush\Pastes\Draft $draft The draft to import.
+		 * @param \Brush\Accounts\Account $owner The owner of the new paste. Omit if anonymous.
 		 * @return \Brush\Pastes\Paste The created paste.
 		 */
-		public static function fromPasted($url, Draft $draft) {
+		public static function fromPasted($url, Draft $draft, Account $owner = null) {
 			$paste = new Paste();
 			$paste->import($draft);
 			$paste->setUrl($url);
@@ -311,6 +344,10 @@ namespace Brush\Pastes {
 
 			$offset = Expiry::getOffset($draft->getExpiry());
 			$paste->setExpires($offset == 0 ? 0 : $paste->getDate() + $offset);
+
+			if ($owner !== null) {
+				$paste->setOwner($owner);
+			}
 
 			return $paste;
 		}
@@ -325,10 +362,6 @@ namespace Brush\Pastes {
 			$this->setSize(strlen($draft->getContent()));
 			$this->setFormat($draft->getFormat());
 			$this->setVisibility($draft->getVisibility());
-
-			if ($draft->hasOwner()) {
-				$this->setOwner($draft->getOwner());
-			}
 		}
 
 		/**

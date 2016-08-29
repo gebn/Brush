@@ -60,32 +60,27 @@ namespace Brush\Pastes {
 		/**
 		 * Submit this draft paste to the Pastebin API.
 		 * @param \Brush\Accounts\Developer $developer The developer account to use to send the request.
+		 * @param \Brush\Accounts\Account $owner The account that should own the paste. Omit for anonymous paste.
 		 * @return \Brush\Pastes\Paste The created paste.
 		 */
-		public function paste(Developer $developer) {
+		public function paste(Developer $developer, Account $owner = null) {
 
 			// throw on any errors
 			$this->validate();
 
+			// carry out draft owner validation
+			if ($this->getVisibility() == Visibility::VISIBILITY_PRIVATE && $owner === null) {
+				throw new ValidationException('Private pastes must have an owner set. Change the visibility, or specify the owner.');
+			}
+
 			// create the request
 			$pastebin = new ApiRequest($developer, self::ENDPOINT);
 			$pastebin->setOption('paste');
+			$owner->sign($pastebin->getRequest(), $developer);
 			$this->addTo($pastebin->getRequest(), $developer);
 
 			// send and create a paste from this draft
-			return Paste::fromPasted($pastebin->send(), $this);
-		}
-
-		/**
-		 * Ensure this draft is ready to be sent to Pastebin.
-		 * These checks are not exhaustive - they don't scan for setting invalid expirations or visibilities for example.
-		 * @throws \Brush\Exceptions\ValidationException If any errors are found; check the message for details.
-		 */
-		protected function validate() {
-			parent::validate();
-			if ($this->getVisibility() == Visibility::VISIBILITY_PRIVATE && !$this->hasOwner()) {
-				throw new ValidationException('Private pastes must have an owner set. Change the visibility, or specify the owner.');
-			}
+			return Paste::fromPasted($pastebin->send(), $this, $owner);
 		}
 
 		/**
@@ -99,14 +94,13 @@ namespace Brush\Pastes {
 		}
 
 		/**
-		 * Create a new draft with an account's default settings, and set them as the owner.
+		 * Create a new draft with an account's default settings.
 		 * @param \Brush\Accounts\Account $account The owner's account whose settings to use.
 		 * @param \Brush\Accounts\Developer $developer The developer account to use if settings need to be retrieved.
 		 * @return \Brush\Pastes\Draft The created draft paste.
 		 */
 		public static function fromOwner(Account $account, Developer $developer) {
 			$draft = new Draft();
-			$draft->setOwner($account);
 			User::fromAccount($account, $developer)->getDefaults()->applyTo($draft);
 			return $draft;
 		}
