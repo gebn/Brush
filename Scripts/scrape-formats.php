@@ -4,7 +4,7 @@
  * Re-generates the `formats.ini` file.
  */
 
-const API_PAGE = 'http://pastebin.com/api';
+const API_PAGE = 'https://pastebin.com/api';
 
 // download the API page
 $html = file_get_contents(API_PAGE);

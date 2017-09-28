@@ -110,7 +110,7 @@ namespace Brush\Accounts {
 		 * @return bool True if they do, false if it's the default.
 		 */
 		public final function hasCustomAvatar() {
-			return $this->getAvatarUrl() != 'http://pastebin.com/i/guest.gif';
+			return $this->getAvatarUrl() != 'https://pastebin.com/i/guest.gif';
 		}
 
 		/**

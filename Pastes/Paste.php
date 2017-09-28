@@ -77,7 +77,7 @@ namespace Brush\Pastes {
 		 * @return string The URL of this paste.
 		 */
 		public function getUrl() {
-			return 'http://pastebin.com/' . $this->getKey();
+			return 'https://pastebin.com/' . $this->getKey();
 		}
 
 		/**
@@ -224,7 +224,7 @@ namespace Brush\Pastes {
 			assert($paste->getVisibility() === Visibility::VISIBILITY_PUBLIC
 				|| $paste->getVisibility() === Visibility::VISIBILITY_UNLISTED);
 
-			$request = new GETRequest('http://pastebin.com/raw/' . $paste->getKey());
+			$request = new GETRequest('https://pastebin.com/raw/' . $paste->getKey());
 
 			try {
 				return $request->getResponse()->getBody();

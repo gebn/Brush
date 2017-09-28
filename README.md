@@ -39,7 +39,7 @@ try {
 	$paste = $draft->paste($developer);
 
 	// print out the URL of the new paste
-	echo $paste->getUrl(); // e.g. http://pastebin.com/JYvbS0fC
+	echo $paste->getUrl(); // e.g. https://pastebin.com/JYvbS0fC
 }
 catch (BrushException $e) {
 	// some sort of error occurred; check the message for the cause
@@ -202,4 +202,4 @@ If you discover a bug, please open a [new issue](https://github.com/gebn/Brush/i
 
 ## Licence
 
-Brush is released under the MIT Licence - see the LICENSE file for details. For more information about how this allows you to use the library, see the [Wikipedia article](http://en.wikipedia.org/wiki/MIT_License).
+Brush is released under the MIT Licence - see the LICENSE file for details. For more information about how this allows you to use the library, see the [Wikipedia article](https://en.wikipedia.org/wiki/MIT_License).
