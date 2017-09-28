@@ -77,9 +77,9 @@ namespace Brush\Pastes\Options {
 				case self::EXPIRY_ONE_DAY: return 60 * 60 * 24;
 				case self::EXPIRY_ONE_WEEK: return 60 * 60 * 24 * 7;
 				case self::EXPIRY_TWO_WEEKS: return 60 * 60 * 24 * 7 * 2;
-				case self::EXPIRY_ONE_MONTH: return 60 * 60 * 24 * 28;
-				case self::EXPIRY_SIX_MONTHS: return 60 * 60 * 24 * 28 * 6;
-				case self::EXPIRY_ONE_YEAR: return 60 * 60 * 24 * 28 * 12;
+				case self::EXPIRY_ONE_MONTH: return 60 * 60 * 730;
+				case self::EXPIRY_SIX_MONTHS: return 60 * 60 * 730 * 6;
+				case self::EXPIRY_ONE_YEAR: return 60 * 60 * 730 * 12;
 				case self::EXPIRY_NEVER: return 0;
 				default: throw new ArgumentException(sprintf('Unrecognised expiry: \'%s\'', $expiry));
 			}
