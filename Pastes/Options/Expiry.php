@@ -47,6 +47,18 @@ namespace Brush\Pastes\Options {
 		const EXPIRY_ONE_MONTH = '1M';
 
 		/**
+		 * Indicates the paste should expire in six months.
+		 * @var string
+		 */
+		const EXPIRY_SIX_MONTHS = '6M';
+
+		/**
+		 * Indicates the paste should expire in a year.
+		 * @var string
+		 */
+		const EXPIRY_ONE_YEAR = '1Y';
+
+		/**
 		 * Indicates the paste should never expire.
 		 * @var string
 		 */
@@ -66,6 +78,8 @@ namespace Brush\Pastes\Options {
 				case self::EXPIRY_ONE_WEEK: return 60 * 60 * 24 * 7;
 				case self::EXPIRY_TWO_WEEKS: return 60 * 60 * 24 * 7 * 2;
 				case self::EXPIRY_ONE_MONTH: return 60 * 60 * 24 * 28;
+				case self::EXPIRY_SIX_MONTHS: return 60 * 60 * 24 * 28 * 6;
+				case self::EXPIRY_ONE_YEAR: return 60 * 60 * 24 * 28 * 12;
 				case self::EXPIRY_NEVER: return 0;
 				default: throw new ArgumentException(sprintf('Unrecognised expiry: \'%s\'', $expiry));
 			}
@@ -85,6 +99,8 @@ namespace Brush\Pastes\Options {
 				case self::EXPIRY_ONE_WEEK: return '1 week';
 				case self::EXPIRY_TWO_WEEKS: return '2 weeks';
 				case self::EXPIRY_ONE_MONTH: return '1 month';
+				case self::EXPIRY_SIX_MONTHS: return '6 months';
+				case self::EXPIRY_ONE_YEAR: return '1 year';
 				case self::EXPIRY_NEVER: return 'Never';
 				default: throw new ArgumentException(sprintf('Unrecognised expiry: \'%s\'', $expiry));
 			}
