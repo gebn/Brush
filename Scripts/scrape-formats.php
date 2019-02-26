@@ -4,28 +4,20 @@
  * Re-generates the `formats.ini` file.
  */
 
-const API_PAGE = 'https://pastebin.com/api';
+const LANGUAGES_PAGE = 'https://pastebin.com/languages';
 
-// download the API page
-$html = file_get_contents(API_PAGE);
+$html = file_get_contents(LANGUAGES_PAGE);
 
-// extract a substring containing the code/name pairs
-if (preg_match('/language in question\.(.+)/', $html, $matches) !== 1) {
-	error_log('Failed to identify formats section within page');
-	exit(1);
-}
-
-// drill further into this section, extracting individual pairs
-if (!preg_match_all('/(?:&nbsp;){4}(.+?) = (.+?)<br \/>/', $matches[1], $matches)) {
+if (!preg_match_all('/<div class="lang_div">\d+\. <a href="\/archive\/(.+?)">(.+?)<\/a>/', $html, $matches)) {
 	error_log('Failed to parse any formats');
-	exit(2);
+	exit(1);
 }
 
 // format and sort the results
 $formats = array_combine($matches[1], $matches[2]);
 if (empty($formats)) {
 	error_log('Failed to parse any formats');
-	exit(3);
+	exit(2);
 }
 ksort($formats);
 
