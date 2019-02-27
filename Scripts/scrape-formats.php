@@ -6,7 +6,10 @@
 
 const LANGUAGES_PAGE = 'https://pastebin.com/languages';
 
-$html = file_get_contents(LANGUAGES_PAGE);
+if (($html = file_get_contents(LANGUAGES_PAGE)) === false) {
+	error_log('Failed to retrieve languages page');
+	exit(1);
+}
 
 if (!preg_match_all('/<div class="lang_div">\d+\. <a href="\/archive\/(.+?)">(.+?)<\/a>/', $html, $matches)) {
 	error_log('Failed to parse any formats');
@@ -17,14 +20,14 @@ if (!preg_match_all('/<div class="lang_div">\d+\. <a href="\/archive\/(.+?)">(.+
 $formats = array_combine($matches[1], $matches[2]);
 if (empty($formats)) {
 	error_log('Failed to parse any formats');
-	exit(2);
+	exit(1);
 }
 ksort($formats);
 
 // attempt to create a new formats.ini file
 if (($handle = fopen('formats.ini', 'w')) === false) {
 	error_log('Unable to open formats.ini for writing');
-	exit(3);
+	exit(1);
 }
 
 // write preamble
