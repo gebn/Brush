@@ -24,7 +24,7 @@ ksort($formats);
 // attempt to create a new formats.ini file
 if (($handle = fopen('formats.ini', 'w')) === false) {
 	error_log('Unable to open formats.ini for writing');
-	exit(4);
+	exit(3);
 }
 
 // write preamble
