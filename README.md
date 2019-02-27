@@ -16,6 +16,8 @@ Brush is a complete object-oriented PHP wrapper for the Pastebin API.
 
 ## Install
 
+Composer is not required, however Brush is on Packagist and may be added to a project with:
+
     composer require gebn/brush "1.*"
 
 ## Getting Started
